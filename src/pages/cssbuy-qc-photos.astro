@@ -1,0 +1,50 @@
+---
+import { getBreadcrumbSchema, getItemListSchema, getProductImageAlt, products } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const qcProducts = products.filter((product) => product.qc);
+const title = "CSSBuy QC Photos - QC Ready Spreadsheet Finds";
+const description =
+  "Browse CSSBuy spreadsheet finds marked as QC ready, with product images, prices, categories, and update dates for faster quality checks.";
+const schema = [
+  getItemListSchema({
+    items: qcProducts,
+    name: "CSSBuy QC photo ready spreadsheet finds",
+    url: "https://cssfinds.com/cssbuy-qc-photos/",
+  }),
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "CSSBuy Spreadsheet", url: "https://cssfinds.com/cssbuy-spreadsheet/" },
+    { name: "CSSBuy QC Photos", url: "https://cssfinds.com/cssbuy-qc-photos/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <section class="shell py-10">
+    <p class="text-sm font-black uppercase text-clay">QC index</p>
+    <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
+      CSSBuy QC Photos and QC Ready Finds
+    </h1>
+    <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">
+      Prioritize listings marked as QC ready before adding items to your CSSBuy haul. Use this page as a quality-focused entry point for spreadsheet users.
+    </p>
+  </section>
+  <section class="shell grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {
+      qcProducts.map((product) => (
+        <article class="panel rounded-lg overflow-hidden">
+          <img class="h-52 w-full object-cover" src={product.image} alt={getProductImageAlt(product)} loading="lazy" width="640" height="426" />
+          <div class="p-5">
+            <p class="text-sm font-black uppercase text-clay">{product.category}</p>
+            <h2 class="mt-2 text-xl font-black">{product.name}</h2>
+            <p class="mt-2 text-sm font-bold text-ink/60">{product.brand} / ${product.price} / Updated {product.updated}</p>
+            <a class="button mt-4 border border-ink bg-ink text-white" href={product.destinationUrl} rel="sponsored noopener" target="_blank">
+              View on StreetStyle
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

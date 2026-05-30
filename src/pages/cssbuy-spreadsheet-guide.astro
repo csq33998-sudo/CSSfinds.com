@@ -1,0 +1,108 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getBreadcrumbSchema } from "@/data/products";
+
+const title = "CSSBuy Spreadsheet Guide 2026 - Finds, QC Photos, Shoes and Hoodies";
+const description =
+  "Learn how to use the CSSBuy spreadsheet on CSSFinds to compare CSSBuy finds, QC photos, shoes, hoodies, T-shirts, bags, prices, update dates, and category pages.";
+
+const faq = [
+  {
+    question: "What is a CSSBuy spreadsheet?",
+    answer:
+      "A CSSBuy spreadsheet is an organized product index that helps shoppers compare finds by category, price, QC status, update date, and product notes before opening a shopping destination.",
+  },
+  {
+    question: "How should I use CSSBuy QC photos?",
+    answer:
+      "Use QC photos to check shape, stitching, color, material, logos, tags, and sizing details. Compare the photos with product notes and recent updates before deciding whether a find is worth ordering.",
+  },
+  {
+    question: "Why does CSSFinds use category pages?",
+    answer:
+      "Category pages give shoes, hoodies, T-shirts, bags, accessories, pants, and QC photos their own crawlable URLs, which helps shoppers and search engines find the most relevant CSSBuy spreadsheet section.",
+  },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "CSSBuy Spreadsheet Guide 2026",
+    description,
+    mainEntityOfPage: "https://cssfinds.com/cssbuy-spreadsheet-guide/",
+    publisher: {
+      "@type": "Organization",
+      name: "CSSFinds",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "CSSBuy Spreadsheet", url: "https://cssfinds.com/cssbuy-spreadsheet/" },
+    { name: "CSSBuy Spreadsheet Guide", url: "https://cssfinds.com/cssbuy-spreadsheet-guide/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <article class="shell py-10">
+    <p class="text-sm font-black uppercase text-clay">Buying guide</p>
+    <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
+      CSSBuy Spreadsheet Guide for finds, QC photos, and category research
+    </h1>
+    <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">
+      Use this guide to read the CSSFinds spreadsheet like a product research index: compare CSSBuy shoes, hoodies, T-shirts, bags, accessories, pants, prices, QC photo status, and recent update signals before you continue to StreetStyle.
+    </p>
+    <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_340px]">
+      <div class="panel rounded-lg p-6">
+        <div class="prose max-w-none prose-headings:font-black prose-p:leading-8 prose-a:font-bold prose-a:text-ocean">
+          <h2>How to use a CSSBuy spreadsheet</h2>
+          <p>
+            Start from the <a href="/cssbuy-spreadsheet/">CSSBuy spreadsheet</a> and filter by product category, price range, brand, and QC availability. A useful spreadsheet should make each find easy to scan before you open a product page, place an order, or compare it with similar listings.
+          </p>
+          <h2>What to check before buying CSSBuy finds</h2>
+          <p>
+            Review product photos, recent update dates, buyer notes, sizing comments, and whether QC photos are available. For clothing, compare measurements before shipping. For <a href="/cssbuy-shoes/">CSSBuy shoes</a> and bags, inspect shape, material, stitching, sole details, logos, and color consistency.
+          </p>
+          <h2>Why category pages help Google index CSSFinds</h2>
+          <p>
+            Dedicated pages for <a href="/cssbuy-shoes/">CSSBuy shoes</a>, <a href="/cssbuy-hoodies/">CSSBuy hoodies</a>, <a href="/cssbuy-tshirts/">CSSBuy T-shirts</a>, <a href="/cssbuy-bags/">bags</a>, <a href="/cssbuy-accessories/">accessories</a>, <a href="/cssbuy-pants/">pants</a>, and <a href="/cssbuy-qc-photos/">CSSBuy QC photos</a> give each topic a clear URL, heading, and internal link path. This helps Google understand the site structure and match long-tail searches to the most relevant page.
+          </p>
+          <h2>Best workflow for comparing CSSBuy products</h2>
+          <p>
+            Search broad terms first, narrow by category, then compare the remaining finds by price, QC status, and update date. Open the strongest product photos, check notes for sizing or quality warnings, and use the category pages when you want a focused list instead of the full spreadsheet.
+          </p>
+          <h2>Frequently asked questions</h2>
+          {faq.map((item) => (
+            <>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </>
+          ))}
+        </div>
+      </div>
+      <aside class="panel rounded-lg p-6">
+        <h2 class="text-xl font-black">CSSBuy checklist</h2>
+        <ul class="mt-4 grid gap-3 text-sm font-bold text-ink/75">
+          <li>Check whether QC photos are available</li>
+          <li>Compare the price against similar CSSBuy finds</li>
+          <li>Open product photos before ordering</li>
+          <li>Review update date, notes, and sizing comments</li>
+          <li>Use category pages for shoes, hoodies, T-shirts, bags, and QC photos</li>
+        </ul>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>

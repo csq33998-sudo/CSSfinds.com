@@ -1,0 +1,119 @@
+---
+import { copy, type Lang } from "@/data/i18n";
+import { getCategoryLabel, getProductImageAlt, getProductName, type Product } from "@/data/products";
+
+type Props = {
+  products: Product[];
+  heading?: string;
+  intro?: string;
+  lang?: Lang;
+};
+
+const { products, lang = "en" } = Astro.props;
+const t = copy[lang].explorer;
+const heading = Astro.props.heading ?? t.heading;
+const intro = Astro.props.intro ?? t.intro;
+const latestProducts = [...products].sort((a, b) => b.updated.localeCompare(a.updated));
+const explorerId = `product-explorer-${Math.random().toString(36).slice(2)}`;
+const streetStyleSearch = {
+  en: { placeholder: "Search CSSBuy finds...", button: "Search" },
+  de: { placeholder: "CSSBuy Finds suchen...", button: "Suchen" },
+  fr: { placeholder: "Rechercher des finds CSSBuy...", button: "Rechercher" },
+  es: { placeholder: "Buscar finds CSSBuy...", button: "Buscar" },
+  it: { placeholder: "Cerca finds CSSBuy...", button: "Cerca" },
+  nl: { placeholder: "CSSBuy finds zoeken...", button: "Zoeken" },
+  pt: { placeholder: "Buscar finds CSSBuy...", button: "Buscar" },
+}[lang];
+
+const getViews = (product: Product) => {
+  const seed = [...product.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return 1200 + seed * 7;
+};
+---
+
+<section id={explorerId} class="shell mt-10" aria-labelledby="latest-products-heading" data-product-explorer>
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h2 id="latest-products-heading" class="text-3xl font-black tracking-normal md:text-4xl">{heading}</h2>
+      <p class="mt-2 text-sm font-bold text-ink/55">{intro}</p>
+    </div>
+    <p class="text-sm font-black uppercase text-clay" data-product-count>{latestProducts.length} {t.items}</p>
+  </div>
+
+  <form
+    class="mt-6 flex w-full max-w-5xl overflow-hidden rounded-lg border border-line bg-white shadow-sm"
+    action="https://streetstyle.maisonlooks.com/en/search"
+    method="get"
+    target="_blank"
+    rel="noopener"
+    role="search"
+    aria-label="Search StreetStyle finds"
+    data-streetstyle-search
+  >
+    <label class="sr-only" for={`${explorerId}-search`}>{t.search}</label>
+    <input
+      id={`${explorerId}-search`}
+      class="min-h-14 min-w-0 flex-1 border-0 bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-0"
+      type="search"
+      name="q"
+      placeholder={streetStyleSearch.placeholder}
+      autocomplete="off"
+      data-streetstyle-search-input
+    />
+    <button class="min-h-14 shrink-0 bg-[#ff4b0b] px-6 text-base font-black text-white transition hover:bg-[#e83f00] md:px-8" type="submit">
+      {streetStyleSearch.button}
+    </button>
+  </form>
+
+  <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+    {
+      latestProducts.map((product) => (
+        <article
+          class="group overflow-hidden rounded-lg border border-line bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-ink hover:shadow-lg"
+          data-product-row
+          data-search={`${product.name} ${getProductName(product, lang)} ${product.brand} ${product.category} ${getCategoryLabel(product.category, lang)} ${product.tags.join(" ")}`.toLowerCase()}
+          data-category={product.category}
+          data-brand={product.brand}
+          data-price={product.price}
+          data-qc={product.qc ? "true" : "false"}
+        >
+          <a href={product.destinationUrl} rel="sponsored noopener" target="_blank" aria-label={`${t.view}: ${getProductName(product, lang)}`}>
+            <img
+              class="aspect-[4/3] w-full bg-paper object-cover transition duration-200 group-hover:scale-[1.03]"
+              src={product.image}
+              alt={getProductImageAlt(product, lang)}
+              loading="lazy"
+              width="640"
+              height="480"
+            />
+          </a>
+          <div class="p-4">
+            <div class="flex items-center justify-between gap-3">
+              <span class="tag">{getCategoryLabel(product.category, lang)}</span>
+              <span class={product.qc ? "tag border-moss text-moss" : "tag text-ink/55"}>{product.qc ? t.available : t.pending}</span>
+            </div>
+            <h3 class="mt-3 min-h-[48px] text-base font-black leading-6">
+              <a class="hover:text-ocean" href={product.destinationUrl} rel="sponsored noopener" target="_blank">
+                {getProductName(product, lang)}
+              </a>
+            </h3>
+            <p class="mt-1 text-xs font-bold text-ink/50">{product.brand} / {t.updated} {product.updated}</p>
+            <div class="mt-4 flex items-center justify-between gap-3">
+              <p class="text-xl font-black text-ink">${product.price}</p>
+              <div class="flex items-center gap-1 text-sm font-bold text-ink/55" aria-label={`${getViews(product)} views`}>
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span>{getViews(product).toLocaleString("en-US")}</span>
+              </div>
+            </div>
+            <a class="button mt-4 w-full border border-ink bg-ink text-center text-white" href={product.destinationUrl} rel="sponsored noopener" target="_blank">
+              {t.view}
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

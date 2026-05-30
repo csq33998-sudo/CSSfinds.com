@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-labelledby="title desc">
+  <title id="title">CSSBuy spreadsheet Finds</title>
+  <desc id="desc">CSSFinds round yellow and red website icon for CSSBuy spreadsheet finds.</desc>
+  <circle cx="110" cy="110" r="104" fill="#ffef18"/>
+  <circle cx="110" cy="110" r="101" fill="none" stroke="#ff1616" stroke-width="8"/>
+  <g fill="#111" stroke="#ff1616" stroke-linejoin="round" paint-order="stroke fill">
+    <text x="57" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="60" font-style="italic" font-weight="700" stroke-width="3">Css</text>
+    <text x="36" y="151" font-family="Georgia, 'Times New Roman', serif" font-size="55" font-style="italic" font-weight="700" stroke-width="3">Finds</text>
+  </g>
+  <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="5" d="M83 189c28-10 55-16 87-19"/>
+    <path stroke-width="5" d="M37 93l-14-8"/>
+    <path stroke-width="5" d="M34 105H19"/>
+    <path stroke-width="5" d="M37 117l-14 8"/>
+    <path stroke-width="5" d="M179 93l14-8"/>
+    <path stroke-width="5" d="M184 105h15"/>
+    <path stroke-width="5" d="M179 117l14 8"/>
+  </g>
+</svg>

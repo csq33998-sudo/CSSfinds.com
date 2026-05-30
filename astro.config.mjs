@@ -1,0 +1,13 @@
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
+import tailwind from "@astrojs/tailwind";
+
+export default defineConfig({
+  site: "https://cssfinds.com",
+  integrations: [tailwind(), sitemap()],
+  vite: {
+    optimizeDeps: {
+      exclude: ["aria-query", "axobject-query", "cssesc"],
+    },
+  },
+});

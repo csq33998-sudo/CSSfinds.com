@@ -1,0 +1,108 @@
+---
+import "../styles/global.css";
+import { copy, languages, localizePath, type Lang } from "@/data/i18n";
+
+type Props = {
+  title: string;
+  description: string;
+  canonical?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  image?: string;
+  lang?: Lang;
+};
+
+const { title, description, canonical = Astro.url.href, schema, image = "/images/og/cssfinds-og.svg", lang = "en" } = Astro.props;
+const siteName = "CSSFinds";
+const t = copy[lang];
+const currentPath = Astro.url.pathname;
+const absoluteUrl = (path: string) => new URL(path, Astro.site ?? "https://cssfinds.com").href;
+const socialImage = absoluteUrl(image);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    {
+      languages.map((language) => (
+        <link rel="alternate" hreflang={language.code} href={absoluteUrl(localizePath(currentPath, language.code))} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={absoluteUrl(localizePath(currentPath, "en"))} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CSSFinds CSSBuy spreadsheet product finds preview" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={socialImage} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  </head>
+  <body>
+    <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:font-bold" href="#main">
+      {t.skip}
+    </a>
+    <header class="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur">
+      <nav class="shell flex min-h-16 flex-wrap items-center justify-between gap-3 py-3" aria-label="Primary navigation">
+        <a href={localizePath("/", lang)} class="flex items-center gap-3 font-black tracking-normal">
+          <img src="/cssfinds-logo.svg" alt="CSSBuy spreadsheet Finds CSSFinds logo" class="h-11 w-11" width="220" height="220" />
+          <span>CSSFinds</span>
+        </a>
+        <div class="flex flex-wrap items-center justify-end gap-2 text-sm font-bold">
+          <div class="hidden items-center gap-2 md:flex">
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/", lang)}>{t.nav.home}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={`${localizePath("/", lang)}#latest-products-heading`}>{t.nav.spreadsheet}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={`${localizePath("/", lang)}#faq-heading`}>{t.nav.faq}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet-guide/", lang)}>{t.nav.guide}</a>
+          </div>
+          <label class="sr-only" for="language-select">{t.nav.language}</label>
+          <select id="language-select" class="control min-w-36 py-2 text-sm font-bold" aria-label={t.nav.language} data-language-select>
+            {
+              languages.map((language) => (
+                <option value={localizePath(currentPath, language.code)} selected={language.code === lang}>
+                  {language.label}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="mt-16 border-t border-line bg-white py-10 text-ink">
+      <div class="shell grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+        <div>
+          <p class="font-black">CSSFinds</p>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-ink/65">
+            {t.footer}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-sm font-bold text-ink/70">
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-qc-photos/", lang)}>{t.footerQc}</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/robots.txt">{t.footerRobots}</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  document.querySelectorAll("[data-language-select]").forEach((select) => {
+    select.addEventListener("change", (event) => {
+      const target = event.currentTarget as HTMLSelectElement;
+      window.location.href = target.value;
+    });
+  });
+</script>

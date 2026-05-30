@@ -1,0 +1,166 @@
+---
+import type { Lang } from "@/data/i18n";
+
+type Props = {
+  lang?: Lang;
+};
+
+const { lang = "en" } = Astro.props;
+const faqCopy = {
+  en: {
+    eyebrow: "FAQ",
+    heading: "CSSBuy Spreadsheet FAQ for Finds",
+    intro:
+      "Get answers about CSSBuy spreadsheet finds, QC photos, updated product links, categories, and how to compare CSSBuy products before you shop.",
+    items: [
+      {
+        question: "What is a CSSBuy spreadsheet for finds?",
+        answer:
+          "A CSSBuy spreadsheet is a curated sheet of CSSBuy finds that helps shoppers compare products by category, price, QC photo status, image, and update date before opening a product or shopping link.",
+      },
+      {
+        question: "How do I use CSSFinds to browse CSSBuy finds?",
+        answer:
+          "Use CSSFinds as a searchable CSSBuy spreadsheet: scan the latest finds, filter by item type or price, check whether QC photos are available, then open the strongest listing to review the product details.",
+      },
+      {
+        question: "Why are QC photos useful for CSSBuy products?",
+        answer:
+          "QC photos are quality-check references for CSSBuy products. They help you inspect shape, color, stitching, material, logos, tags, and sizing details before deciding whether a find is worth ordering.",
+      },
+      {
+        question: "Does this CSSBuy spreadsheet include shoes, hoodies, T-shirts, bags, and pants?",
+        answer:
+          "Yes. The spreadsheet is organized around popular CSSBuy finds such as shoes, hoodies, T-shirts, bags, accessories, and pants, with category pages that make each product type easier to browse.",
+      },
+    ],
+  },
+  de: {
+    eyebrow: "FAQ",
+    heading: "CSSBuy Spreadsheet FAQ fur Finds",
+    intro: "Antworten zu CSSBuy Finds, QC-Fotos, Produktlinks, Kategorien und dem Vergleich vor dem Kauf.",
+    items: [
+      { question: "Was ist ein CSSBuy Spreadsheet?", answer: "Es ist eine kuratierte Produktliste, mit der du Finds nach Kategorie, Preis, QC-Status, Bild und Update-Datum vergleichen kannst." },
+      { question: "Wie nutze ich CSSFinds?", answer: "Suche im Spreadsheet, filtere nach Kategorie, Marke, Preis oder QC-Status und offne danach den passenden Produktlink." },
+      { question: "Warum sind QC-Fotos wichtig?", answer: "QC-Fotos helfen dir, Form, Farbe, Naehte, Material, Logos, Tags und Groesse vor einer Bestellung besser einzuschaetzen." },
+      { question: "Welche Kategorien gibt es?", answer: "CSSFinds deckt Schuhe, Hoodies, T-Shirts, Taschen, Accessoires und Hosen mit eigenen Kategorieseiten ab." },
+    ],
+  },
+  fr: {
+    eyebrow: "FAQ",
+    heading: "FAQ CSSBuy Spreadsheet pour les finds",
+    intro: "Reponses sur les finds CSSBuy, les photos QC, les liens produit, les categories et la comparaison avant achat.",
+    items: [
+      { question: "Qu'est-ce qu'un CSSBuy spreadsheet ?", answer: "C'est une liste de produits organisee pour comparer les finds par categorie, prix, statut QC, image et date de mise a jour." },
+      { question: "Comment utiliser CSSFinds ?", answer: "Recherchez dans le tableau, filtrez par categorie, marque, prix ou QC, puis ouvrez le lien produit le plus pertinent." },
+      { question: "Pourquoi les photos QC sont-elles utiles ?", answer: "Elles aident a verifier la forme, la couleur, les coutures, les matieres, les logos, les etiquettes et les details de taille." },
+      { question: "Quelles categories sont incluses ?", answer: "CSSFinds couvre chaussures, hoodies, T-shirts, sacs, accessoires et pantalons avec des pages dediees." },
+    ],
+  },
+  es: {
+    eyebrow: "FAQ",
+    heading: "FAQ de CSSBuy Spreadsheet",
+    intro: "Respuestas sobre finds CSSBuy, fotos QC, enlaces de producto, categorias y comparacion antes de comprar.",
+    items: [
+      { question: "Que es un CSSBuy spreadsheet?", answer: "Es una lista curada para comparar finds por categoria, precio, estado QC, imagen y fecha de actualizacion." },
+      { question: "Como uso CSSFinds?", answer: "Busca en la hoja, filtra por categoria, marca, precio o QC, y abre el enlace de producto mas relevante." },
+      { question: "Por que son utiles las fotos QC?", answer: "Ayudan a revisar forma, color, costuras, material, logos, etiquetas y detalles de talla antes de comprar." },
+      { question: "Que categorias incluye?", answer: "CSSFinds incluye zapatillas, hoodies, camisetas, bolsos, accesorios y pantalones con paginas dedicadas." },
+    ],
+  },
+  it: {
+    eyebrow: "FAQ",
+    heading: "FAQ CSSBuy Spreadsheet",
+    intro: "Risposte su finds CSSBuy, foto QC, link prodotto, categorie e confronto prima dell'acquisto.",
+    items: [
+      { question: "Che cos'e un CSSBuy spreadsheet?", answer: "E una lista curata per confrontare finds per categoria, prezzo, stato QC, immagine e data di aggiornamento." },
+      { question: "Come uso CSSFinds?", answer: "Cerca nel foglio, filtra per categoria, brand, prezzo o QC, poi apri il link prodotto piu pertinente." },
+      { question: "Perche le foto QC sono utili?", answer: "Aiutano a controllare forma, colore, cuciture, materiali, loghi, tag e dettagli di taglia prima dell'acquisto." },
+      { question: "Quali categorie include?", answer: "CSSFinds include sneakers, felpe, T-shirt, borse, accessori e pantaloni con pagine dedicate." },
+    ],
+  },
+  nl: {
+    eyebrow: "FAQ",
+    heading: "CSSBuy Spreadsheet FAQ",
+    intro: "Antwoorden over CSSBuy finds, QC-foto's, productlinks, categorieen en vergelijken voor aankoop.",
+    items: [
+      { question: "Wat is een CSSBuy spreadsheet?", answer: "Het is een samengestelde productlijst waarmee je finds vergelijkt op categorie, prijs, QC-status, beeld en update datum." },
+      { question: "Hoe gebruik ik CSSFinds?", answer: "Zoek in de sheet, filter op categorie, merk, prijs of QC, en open daarna de meest relevante productlink." },
+      { question: "Waarom zijn QC-foto's nuttig?", answer: "Ze helpen vorm, kleur, stiksels, materiaal, logo's, labels en maatdetails te controleren voor je koopt." },
+      { question: "Welke categorieen zijn inbegrepen?", answer: "CSSFinds bevat schoenen, hoodies, T-shirts, tassen, accessoires en broeken met eigen categoriepagina's." },
+    ],
+  },
+  pt: {
+    eyebrow: "FAQ",
+    heading: "FAQ da CSSBuy Spreadsheet",
+    intro: "Respostas sobre finds CSSBuy, fotos QC, links de produto, categorias e comparacao antes da compra.",
+    items: [
+      { question: "O que e uma CSSBuy spreadsheet?", answer: "E uma lista curada para comparar finds por categoria, preco, status QC, imagem e data de atualizacao." },
+      { question: "Como uso o CSSFinds?", answer: "Pesquise na planilha, filtre por categoria, marca, preco ou QC, e abra o link de produto mais relevante." },
+      { question: "Por que fotos QC sao uteis?", answer: "Elas ajudam a verificar formato, cor, costura, material, logos, etiquetas e detalhes de tamanho antes da compra." },
+      { question: "Quais categorias existem?", answer: "CSSFinds cobre tenis, hoodies, camisetas, bolsas, acessorios e calcas com paginas dedicadas." },
+    ],
+  },
+} satisfies Record<Lang, { eyebrow: string; heading: string; intro: string; items: { question: string; answer: string }[] }>;
+
+const currentCopy = faqCopy[lang];
+const faqs = currentCopy.items;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<section class="shell mt-12" aria-labelledby="faq-heading" data-faq-section>
+  <div class="text-center">
+    <p class="text-sm font-black uppercase text-clay">{currentCopy.eyebrow}</p>
+    <h2 id="faq-heading" class="mt-2 text-3xl font-black tracking-normal text-ink md:text-4xl">{currentCopy.heading}</h2>
+    <p class="mx-auto mt-4 max-w-2xl text-sm leading-6 text-ink/58 md:text-base">
+      {currentCopy.intro}
+    </p>
+  </div>
+
+  <div class="mt-12 grid gap-5">
+      {
+        faqs.map((item) => (
+          <details class="group rounded-lg border border-line bg-white px-6 py-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-black text-ink md:text-xl">
+              <span>{item.question}</span>
+              <span class="grid h-8 w-8 shrink-0 place-items-center text-xl leading-none text-clay transition group-open:rotate-180" aria-hidden="true">
+                v
+              </span>
+            </summary>
+            <p class="mt-4 max-w-4xl text-sm leading-6 text-ink/68 md:text-base">{item.answer}</p>
+          </details>
+        ))
+      }
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</section>
+
+<script>
+  document.querySelectorAll("[data-faq-section]").forEach((section) => {
+    const items = section.querySelectorAll("details");
+
+    items.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+
+        items.forEach((otherItem) => {
+          if (otherItem !== item) {
+            otherItem.removeAttribute("open");
+          }
+        });
+      });
+    });
+  });
+</script>

@@ -1,0 +1,109 @@
+---
+import FaqSection from "@/components/FaqSection.astro";
+import ProductExplorer from "@/components/ProductExplorer.astro";
+import { copy } from "@/data/i18n";
+import { categories, getBreadcrumbSchema, getItemListSchema, getProductImageAlt, products, promotionUrl } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const lang = "en";
+const t = copy[lang].home;
+const popularQueries = [
+  "CSSBuy shoes spreadsheet",
+  "CSSBuy hoodie finds",
+  "CSSBuy T-shirts spreadsheet",
+  "CSSBuy bags spreadsheet",
+];
+const title = t.title;
+const description = t.description;
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "CSSFinds",
+    url: "https://cssfinds.com/",
+  },
+  getItemListSchema({
+    items: products,
+    name: "CSSBuy Spreadsheet 2026 finds on CSSFinds",
+    url: "https://cssfinds.com/",
+    lang,
+  }),
+  getBreadcrumbSchema([{ name: "CSSFinds", url: "https://cssfinds.com/" }]),
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema} lang={lang}>
+  <section class="shell grid gap-8 py-10 lg:grid-cols-[1fr_420px] lg:items-center lg:py-14">
+    <div>
+      <div class="flex flex-wrap gap-2">
+        <span class="tag border-ink bg-ink text-white">{t.badgeUpdated}</span>
+        <span class="tag">{t.badgeSpreadsheet}</span>
+        <span class="tag">{t.badgeQc}</span>
+      </div>
+      <h1 class="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
+        {t.h1}
+      </h1>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-ink/70 md:text-lg">
+        {t.intro}
+      </p>
+      <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-ink/60" aria-label="Popular CSSBuy spreadsheet searches">
+        <span class="text-ink">Popular searches:</span>
+        {popularQueries.map((query) => <span class="rounded-full border border-line bg-white px-3 py-1">{query}</span>)}
+      </div>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a class="button bg-ink text-white" href="#latest-products-heading">{t.browse}</a>
+        <a class="button border border-line bg-white text-ink hover:border-ink" href={promotionUrl} rel="sponsored noopener" target="_blank">{t.visit}</a>
+      </div>
+    </div>
+    <div class="panel overflow-hidden rounded-lg">
+      <div class="grid grid-cols-3 gap-px bg-line">
+        {
+          products.slice(0, 3).map((product) => (
+            <img
+              class="aspect-square h-full w-full bg-white object-cover"
+              src={product.image}
+              alt={getProductImageAlt(product)}
+              width="180"
+              height="180"
+            />
+          ))
+        }
+      </div>
+      <div class="grid grid-cols-3 divide-x divide-line border-t border-line bg-white text-center">
+        <div class="p-4">
+          <p class="text-2xl font-black">{products.length}</p>
+          <p class="text-xs font-bold text-ink/55">{t.sampleFinds}</p>
+        </div>
+        <div class="p-4">
+          <p class="text-2xl font-black">{categories.length}</p>
+          <p class="text-xs font-bold text-ink/55">{t.categories}</p>
+        </div>
+        <div class="p-4">
+          <p class="text-2xl font-black">80%</p>
+          <p class="text-xs font-bold text-ink/55">{t.qcTagged}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ProductExplorer products={products} lang={lang} />
+  <section class="shell mt-12">
+    <div class="grid gap-4 rounded-lg border border-line bg-white p-5 md:grid-cols-[1.2fr_2fr] md:items-center">
+      <div>
+        <h2 class="text-xl font-black text-ink">CSSBuy spreadsheet categories</h2>
+        <p class="mt-2 text-sm leading-6 text-ink/65">
+          Browse the full CSSBuy spreadsheet index or open focused category pages for shoes, hoodies, T-shirts, bags, accessories, pants, and QC-ready finds.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2 text-sm font-bold">
+        <a class="rounded-md border border-ink bg-ink px-3 py-2 text-white" href="/cssbuy-spreadsheet/">Full CSSBuy spreadsheet</a>
+        {categories.map((category) => (
+          <a class="rounded-md border border-line px-3 py-2 text-ink/75 hover:border-ink hover:text-ink" href={`/cssbuy-${category.slug}/`}>
+            {category.title}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <FaqSection lang={lang} />
+</BaseLayout>

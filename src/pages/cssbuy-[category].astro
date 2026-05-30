@@ -1,0 +1,44 @@
+---
+import ProductExplorer from "@/components/ProductExplorer.astro";
+import { categories, getBreadcrumbSchema, getItemListSchema, products } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const categoryProducts = products.filter((product) => product.category === category.slug);
+const title = `${category.title} 2026 - Prices, QC Photos and StreetStyle Links`;
+const description = `Browse ${category.label.toLowerCase()} in the CSSBuy spreadsheet with item photos, prices, QC status, update dates, and StreetStyle links.`;
+const canonicalPath = `/cssbuy-${category.slug}/`;
+const schema = [
+  getItemListSchema({
+    items: categoryProducts,
+    name: `${category.title} product finds`,
+    url: `https://cssfinds.com${canonicalPath}`,
+  }),
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "CSSBuy Spreadsheet", url: "https://cssfinds.com/cssbuy-spreadsheet/" },
+    { name: category.title, url: `https://cssfinds.com${canonicalPath}` },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <section class="shell py-10">
+    <p class="text-sm font-black uppercase text-clay">Category spreadsheet</p>
+    <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
+      {category.title}
+    </h1>
+    <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">
+      A focused CSSBuy spreadsheet page for {category.label.toLowerCase()} finds. Use it to compare prices, QC status, update dates, and item tags before continuing to StreetStyle.
+    </p>
+    <a class="button mt-6 bg-ink text-white" href={category.destinationUrl} rel="sponsored noopener" target="_blank">Shop {category.label} on StreetStyle</a>
+  </section>
+  <ProductExplorer products={categoryProducts} heading={category.title} />
+</BaseLayout>

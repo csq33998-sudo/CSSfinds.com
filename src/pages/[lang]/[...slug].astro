@@ -1,0 +1,508 @@
+---
+import FaqSection from "@/components/FaqSection.astro";
+import ProductExplorer from "@/components/ProductExplorer.astro";
+import { copy, isLang, languages, localizePath, type Lang } from "@/data/i18n";
+import { categories, getBreadcrumbSchema, getCategoryLabel, getCategoryTitle, getItemListSchema, getProductImageAlt, products, promotionUrl } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  const slugs = [
+    undefined,
+    "cssbuy-spreadsheet",
+    "cssbuy-spreadsheet-guide",
+    "cssbuy-qc-photos",
+    ...categories.map((category) => `cssbuy-${category.slug}`),
+  ];
+
+  return languages
+    .filter((language) => language.code !== "en")
+    .flatMap((language) =>
+      slugs.map((slug) => ({
+        params: { lang: language.code, slug },
+      })),
+    );
+}
+
+const lang = isLang(Astro.params.lang) ? Astro.params.lang : "en";
+const slug = Astro.params.slug;
+const t = copy[lang].home;
+const explorer = copy[lang].explorer;
+const popularSearches = {
+  en: {
+    label: "Popular searches:",
+    queries: ["CSSBuy shoes spreadsheet", "CSSBuy hoodie finds", "CSSBuy T-shirts spreadsheet", "CSSBuy bags spreadsheet"],
+  },
+  de: {
+    label: "Beliebte Suchen:",
+    queries: ["CSSBuy Schuhe Spreadsheet", "CSSBuy Hoodie Finds", "CSSBuy T-Shirts Spreadsheet", "CSSBuy Taschen Spreadsheet"],
+  },
+  fr: {
+    label: "Recherches populaires :",
+    queries: ["CSSBuy chaussures spreadsheet", "CSSBuy hoodies finds", "CSSBuy T-shirts spreadsheet", "CSSBuy sacs spreadsheet"],
+  },
+  es: {
+    label: "Busquedas populares:",
+    queries: ["CSSBuy zapatillas spreadsheet", "CSSBuy hoodie finds", "CSSBuy camisetas spreadsheet", "CSSBuy bolsos spreadsheet"],
+  },
+  it: {
+    label: "Ricerche popolari:",
+    queries: ["CSSBuy sneakers spreadsheet", "CSSBuy felpe finds", "CSSBuy T-shirt spreadsheet", "CSSBuy borse spreadsheet"],
+  },
+  nl: {
+    label: "Populaire zoekopdrachten:",
+    queries: ["CSSBuy schoenen spreadsheet", "CSSBuy hoodie finds", "CSSBuy T-shirts spreadsheet", "CSSBuy tassen spreadsheet"],
+  },
+  pt: {
+    label: "Buscas populares:",
+    queries: ["CSSBuy tenis spreadsheet", "CSSBuy hoodie finds", "CSSBuy camisetas spreadsheet", "CSSBuy bolsas spreadsheet"],
+  },
+}[lang];
+const localizedPageCopy = {
+  en: {
+    categoryHeading: "CSSBuy spreadsheet categories",
+    categoryIntro:
+      "Browse the full CSSBuy spreadsheet index or open focused category pages for shoes, hoodies, T-shirts, bags, accessories, pants, and QC-ready finds.",
+    fullSpreadsheet: "Full CSSBuy spreadsheet",
+    guideTitle: "CSSBuy Spreadsheet Guide for finds, QC photos, and category research",
+    guideIntro:
+      "Use this guide to read the CSSFinds spreadsheet like a product research index: compare CSSBuy shoes, hoodies, T-shirts, bags, accessories, pants, prices, QC photo status, and recent update signals before you continue to StreetStyle.",
+    guideHow: "How to use a CSSBuy spreadsheet",
+    guideCheck: "What to check before buying CSSBuy finds",
+    guideCategory: "Why category pages help Google index CSSFinds",
+    guideWorkflow: "Best workflow for comparing CSSBuy products",
+    guideFaq: "Frequently asked questions",
+    checklist: "CSSBuy checklist",
+    qcTitle: "CSSBuy QC Photos",
+  },
+  de: {
+    categoryHeading: "CSSBuy Spreadsheet Kategorien",
+    categoryIntro:
+      "Durchsuche den vollstandigen CSSBuy Spreadsheet Index oder offne fokussierte Kategorieseiten fur Schuhe, Hoodies, T-Shirts, Taschen, Accessoires, Hosen und QC-bereite Finds.",
+    fullSpreadsheet: "Vollstandiges CSSBuy Spreadsheet",
+    guideTitle: "CSSBuy Spreadsheet Guide fur Finds, QC-Fotos und Kategorien",
+    guideIntro:
+      "Nutze diesen Guide, um CSSFinds als Produktindex zu lesen: vergleiche Schuhe, Hoodies, T-Shirts, Taschen, Accessoires, Hosen, Preise, QC-Status und Updates, bevor du zu StreetStyle wechselst.",
+    guideHow: "So nutzt du ein CSSBuy Spreadsheet",
+    guideCheck: "Worauf du vor dem Kauf achten solltest",
+    guideCategory: "Warum Kategorieseiten Google beim Indexieren helfen",
+    guideWorkflow: "Bester Ablauf zum Vergleichen von CSSBuy Produkten",
+    guideFaq: "Haufige Fragen",
+    checklist: "CSSBuy Checkliste",
+    qcTitle: "CSSBuy QC-Fotos",
+  },
+  fr: {
+    categoryHeading: "Categories CSSBuy spreadsheet",
+    categoryIntro:
+      "Parcourez l'index CSSBuy spreadsheet complet ou ouvrez des pages ciblees pour chaussures, hoodies, T-shirts, sacs, accessoires, pantalons et finds avec QC.",
+    fullSpreadsheet: "CSSBuy spreadsheet complet",
+    guideTitle: "Guide CSSBuy Spreadsheet pour finds, photos QC et categories",
+    guideIntro:
+      "Utilisez ce guide pour lire CSSFinds comme un index produit: comparez chaussures, hoodies, T-shirts, sacs, accessoires, pantalons, prix, statut QC et mises a jour avant StreetStyle.",
+    guideHow: "Comment utiliser un CSSBuy spreadsheet",
+    guideCheck: "Que verifier avant d'acheter des finds CSSBuy",
+    guideCategory: "Pourquoi les categories aident Google a indexer CSSFinds",
+    guideWorkflow: "Meilleur workflow pour comparer des produits CSSBuy",
+    guideFaq: "Questions frequentes",
+    checklist: "Checklist CSSBuy",
+    qcTitle: "Photos QC CSSBuy",
+  },
+  es: {
+    categoryHeading: "Categorias de CSSBuy spreadsheet",
+    categoryIntro:
+      "Explora el indice completo de CSSBuy spreadsheet o abre paginas por categoria para zapatillas, hoodies, camisetas, bolsos, accesorios, pantalones y finds con QC.",
+    fullSpreadsheet: "CSSBuy spreadsheet completo",
+    guideTitle: "Guia CSSBuy Spreadsheet para finds, fotos QC y categorias",
+    guideIntro:
+      "Usa esta guia para leer CSSFinds como un indice de productos: compara zapatillas, hoodies, camisetas, bolsos, accesorios, pantalones, precios, estado QC y actualizaciones antes de ir a StreetStyle.",
+    guideHow: "Como usar un CSSBuy spreadsheet",
+    guideCheck: "Que revisar antes de comprar finds CSSBuy",
+    guideCategory: "Por que las categorias ayudan a Google a indexar CSSFinds",
+    guideWorkflow: "Mejor flujo para comparar productos CSSBuy",
+    guideFaq: "Preguntas frecuentes",
+    checklist: "Checklist CSSBuy",
+    qcTitle: "Fotos QC CSSBuy",
+  },
+  it: {
+    categoryHeading: "Categorie CSSBuy spreadsheet",
+    categoryIntro:
+      "Sfoglia l'indice CSSBuy spreadsheet completo oppure apri pagine dedicate per sneakers, felpe, T-shirt, borse, accessori, pantaloni e finds con QC.",
+    fullSpreadsheet: "CSSBuy spreadsheet completo",
+    guideTitle: "Guida CSSBuy Spreadsheet per finds, foto QC e categorie",
+    guideIntro:
+      "Usa questa guida per leggere CSSFinds come indice prodotto: confronta sneakers, felpe, T-shirt, borse, accessori, pantaloni, prezzi, stato QC e aggiornamenti prima di StreetStyle.",
+    guideHow: "Come usare un CSSBuy spreadsheet",
+    guideCheck: "Cosa controllare prima di acquistare finds CSSBuy",
+    guideCategory: "Perche le categorie aiutano Google a indicizzare CSSFinds",
+    guideWorkflow: "Workflow migliore per confrontare prodotti CSSBuy",
+    guideFaq: "Domande frequenti",
+    checklist: "Checklist CSSBuy",
+    qcTitle: "Foto QC CSSBuy",
+  },
+  nl: {
+    categoryHeading: "CSSBuy spreadsheet categorieen",
+    categoryIntro:
+      "Bekijk de volledige CSSBuy spreadsheet index of open gerichte categoriepagina's voor schoenen, hoodies, T-shirts, tassen, accessoires, broeken en QC-ready finds.",
+    fullSpreadsheet: "Volledige CSSBuy spreadsheet",
+    guideTitle: "CSSBuy Spreadsheet gids voor finds, QC-foto's en categorieen",
+    guideIntro:
+      "Gebruik deze gids om CSSFinds als productindex te lezen: vergelijk schoenen, hoodies, T-shirts, tassen, accessoires, broeken, prijzen, QC-status en updates voordat je naar StreetStyle gaat.",
+    guideHow: "Hoe gebruik je een CSSBuy spreadsheet",
+    guideCheck: "Wat controleer je voordat je CSSBuy finds koopt",
+    guideCategory: "Waarom categoriepagina's Google helpen CSSFinds te indexeren",
+    guideWorkflow: "Beste workflow om CSSBuy producten te vergelijken",
+    guideFaq: "Veelgestelde vragen",
+    checklist: "CSSBuy checklist",
+    qcTitle: "CSSBuy QC-foto's",
+  },
+  pt: {
+    categoryHeading: "Categorias da CSSBuy spreadsheet",
+    categoryIntro:
+      "Explore o indice completo da CSSBuy spreadsheet ou abra paginas focadas para tenis, hoodies, camisetas, bolsas, acessorios, calcas e finds com QC.",
+    fullSpreadsheet: "CSSBuy spreadsheet completa",
+    guideTitle: "Guia CSSBuy Spreadsheet para finds, fotos QC e categorias",
+    guideIntro:
+      "Use este guia para ler o CSSFinds como um indice de produtos: compare tenis, hoodies, camisetas, bolsas, acessorios, calcas, precos, status QC e atualizacoes antes da StreetStyle.",
+    guideHow: "Como usar uma CSSBuy spreadsheet",
+    guideCheck: "O que verificar antes de comprar finds CSSBuy",
+    guideCategory: "Por que categorias ajudam o Google a indexar o CSSFinds",
+    guideWorkflow: "Melhor fluxo para comparar produtos CSSBuy",
+    guideFaq: "Perguntas frequentes",
+    checklist: "Checklist CSSBuy",
+    qcTitle: "Fotos QC CSSBuy",
+  },
+}[lang];
+const category = categories.find((item) => slug === `cssbuy-${item.slug}`);
+const categoryLabel = category ? getCategoryLabel(category.slug, lang) : "";
+const categoryTitle = category ? getCategoryTitle(category.slug, lang) : "";
+const qcProducts = products.filter((product) => product.qc);
+const shopCta = {
+  en: "Shop {category} on StreetStyle",
+  de: "{category} bei StreetStyle shoppen",
+  fr: "Voir {category} sur StreetStyle",
+  es: "Comprar {category} en StreetStyle",
+  it: "Acquista {category} su StreetStyle",
+  nl: "{category} shoppen op StreetStyle",
+  pt: "Comprar {category} na StreetStyle",
+}[lang];
+const guideDescription =
+  "Learn how to use the CSSBuy spreadsheet on CSSFinds to compare CSSBuy finds, QC photos, shoes, hoodies, T-shirts, bags, prices, update dates, and category pages.";
+const guideFaq = [
+  {
+    question: "What is a CSSBuy spreadsheet?",
+    answer:
+      "A CSSBuy spreadsheet is an organized product index that helps shoppers compare finds by category, price, QC status, update date, and product notes before opening a shopping destination.",
+  },
+  {
+    question: "How should I use CSSBuy QC photos?",
+    answer:
+      "Use QC photos to check shape, stitching, color, material, logos, tags, and sizing details. Compare the photos with product notes and recent updates before deciding whether a find is worth ordering.",
+  },
+  {
+    question: "Why does CSSFinds use category pages?",
+    answer:
+      "Category pages give shoes, hoodies, T-shirts, bags, accessories, pants, and QC photos their own crawlable URLs, which helps shoppers and search engines find the most relevant CSSBuy spreadsheet section.",
+  },
+];
+const guideSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "CSSBuy Spreadsheet Guide 2026",
+    description: guideDescription,
+    publisher: {
+      "@type": "Organization",
+      name: "CSSFinds",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: guideFaq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+];
+
+const renderHome = !slug;
+const renderSpreadsheet = slug === "cssbuy-spreadsheet";
+const renderGuide = slug === "cssbuy-spreadsheet-guide";
+const renderQc = slug === "cssbuy-qc-photos";
+const absoluteLocalPath = (path: string) => `https://cssfinds.com${localizePath(path, lang)}`;
+
+let title = t.title;
+let description = t.description;
+
+if (renderSpreadsheet) {
+  title = `CSSBuy Spreadsheet 2026 - ${explorer.heading}`;
+  description = t.description;
+}
+
+if (category) {
+  title = `${categoryTitle} 2026 - StreetStyle`;
+  description = t.categoryCta.replace("{category}", categoryLabel.toLowerCase());
+}
+
+if (renderGuide) {
+  title = "CSSBuy Spreadsheet Guide 2026 - Finds, QC Photos, Shoes and Hoodies";
+  description = guideDescription;
+}
+
+if (renderQc) {
+  title = `${copy[lang].footerQc} - CSSBuy Spreadsheet`;
+  description = t.description;
+}
+
+const pageSchema = renderGuide
+  ? guideSchema
+  : [
+      ...(renderHome
+        ? [
+            getItemListSchema({
+              items: products,
+              name: "CSSBuy Spreadsheet 2026 finds on CSSFinds",
+              url: absoluteLocalPath("/"),
+              lang,
+            }),
+            getBreadcrumbSchema([{ name: "CSSFinds", url: absoluteLocalPath("/") }]),
+          ]
+        : []),
+      ...(renderSpreadsheet
+        ? [
+            getItemListSchema({
+              items: products,
+              name: "CSSBuy Spreadsheet 2026 product finds",
+              url: absoluteLocalPath("/cssbuy-spreadsheet/"),
+              lang,
+            }),
+            getBreadcrumbSchema([
+              { name: "CSSFinds", url: absoluteLocalPath("/") },
+              { name: "CSSBuy Spreadsheet", url: absoluteLocalPath("/cssbuy-spreadsheet/") },
+            ]),
+          ]
+        : []),
+      ...(category
+        ? [
+            getItemListSchema({
+              items: products.filter((product) => product.category === category.slug),
+              name: `${categoryTitle} product finds`,
+              url: absoluteLocalPath(`/cssbuy-${category.slug}/`),
+              lang,
+            }),
+            getBreadcrumbSchema([
+              { name: "CSSFinds", url: absoluteLocalPath("/") },
+              { name: "CSSBuy Spreadsheet", url: absoluteLocalPath("/cssbuy-spreadsheet/") },
+              { name: categoryTitle, url: absoluteLocalPath(`/cssbuy-${category.slug}/`) },
+            ]),
+          ]
+        : []),
+      ...(renderQc
+        ? [
+            getItemListSchema({
+              items: qcProducts,
+              name: "CSSBuy QC photo ready spreadsheet finds",
+              url: absoluteLocalPath("/cssbuy-qc-photos/"),
+              lang,
+            }),
+            getBreadcrumbSchema([
+              { name: "CSSFinds", url: absoluteLocalPath("/") },
+              { name: "CSSBuy Spreadsheet", url: absoluteLocalPath("/cssbuy-spreadsheet/") },
+              { name: "CSSBuy QC Photos", url: absoluteLocalPath("/cssbuy-qc-photos/") },
+            ]),
+          ]
+        : []),
+    ];
+---
+
+<BaseLayout title={title} description={description} schema={pageSchema.length > 0 ? pageSchema : undefined} lang={lang}>
+  {
+    renderHome && (
+      <>
+        <section class="shell grid gap-8 py-10 lg:grid-cols-[1fr_420px] lg:items-center lg:py-14">
+          <div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag border-ink bg-ink text-white">{t.badgeUpdated}</span>
+              <span class="tag">{t.badgeSpreadsheet}</span>
+              <span class="tag">{t.badgeQc}</span>
+            </div>
+            <h1 class="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">{t.h1}</h1>
+            <p class="mt-5 max-w-3xl text-base leading-7 text-ink/70 md:text-lg">{t.intro}</p>
+            <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-ink/60" aria-label="Popular CSSBuy spreadsheet searches">
+              <span class="text-ink">{popularSearches.label}</span>
+              {popularSearches.queries.map((query) => <span class="rounded-full border border-line bg-white px-3 py-1">{query}</span>)}
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a class="button bg-ink text-white" href="#latest-products-heading">{t.browse}</a>
+              <a class="button border border-line bg-white text-ink hover:border-ink" href={promotionUrl} rel="sponsored noopener" target="_blank">{t.visit}</a>
+            </div>
+          </div>
+          <div class="panel overflow-hidden rounded-lg">
+            <div class="grid grid-cols-3 gap-px bg-line">
+              {products.slice(0, 3).map((product) => (
+                <img
+                  class="aspect-square h-full w-full bg-white object-cover"
+                  src={product.image}
+                  alt={getProductImageAlt(product, lang)}
+                  width="180"
+                  height="180"
+                />
+              ))}
+            </div>
+            <div class="grid grid-cols-3 divide-x divide-line border-t border-line bg-white text-center">
+              <div class="p-4">
+                <p class="text-2xl font-black">{products.length}</p>
+                <p class="text-xs font-bold text-ink/55">{t.sampleFinds}</p>
+              </div>
+              <div class="p-4">
+                <p class="text-2xl font-black">{categories.length}</p>
+                <p class="text-xs font-bold text-ink/55">{t.categories}</p>
+              </div>
+              <div class="p-4">
+                <p class="text-2xl font-black">80%</p>
+                <p class="text-xs font-bold text-ink/55">{t.qcTagged}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <ProductExplorer products={products} lang={lang} />
+        <section class="shell mt-12">
+          <div class="grid gap-4 rounded-lg border border-line bg-white p-5 md:grid-cols-[1.2fr_2fr] md:items-center">
+            <div>
+              <h2 class="text-xl font-black text-ink">{localizedPageCopy.categoryHeading}</h2>
+              <p class="mt-2 text-sm leading-6 text-ink/65">
+                {localizedPageCopy.categoryIntro}
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2 text-sm font-bold">
+              <a class="rounded-md border border-ink bg-ink px-3 py-2 text-white" href={localizePath("/cssbuy-spreadsheet/", lang)}>{localizedPageCopy.fullSpreadsheet}</a>
+              {categories.map((item) => (
+                <a class="rounded-md border border-line px-3 py-2 text-ink/75 hover:border-ink hover:text-ink" href={localizePath(`/cssbuy-${item.slug}/`, lang)}>
+                  {getCategoryTitle(item.slug, lang)}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+        <FaqSection lang={lang} />
+      </>
+    )
+  }
+
+  {
+    renderSpreadsheet && (
+      <>
+        <section class="shell py-10">
+          <p class="text-sm font-black uppercase text-clay">{t.badgeSpreadsheet}</p>
+          <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">CSSBuy Spreadsheet 2026</h1>
+          <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">{t.intro}</p>
+        </section>
+        <ProductExplorer products={products} lang={lang} />
+        <section class="shell mt-8 grid gap-3 md:grid-cols-3" aria-label="CSSBuy spreadsheet category pages">
+          {categories.map((item) => (
+            <a class="button border border-line bg-white text-ink hover:border-moss" href={localizePath(`/cssbuy-${item.slug}/`, lang)}>
+              {getCategoryTitle(item.slug, lang)}
+            </a>
+          ))}
+        </section>
+      </>
+    )
+  }
+
+  {
+    category && (
+      <>
+        <section class="shell py-10">
+          <p class="text-sm font-black uppercase text-clay">{t.categories}</p>
+          <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">{categoryTitle}</h1>
+          <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">{t.categoryCta.replace("{category}", categoryLabel.toLowerCase())}</p>
+          <a class="button mt-6 bg-ink text-white" href={category.destinationUrl} rel="sponsored noopener" target="_blank">{shopCta.replace("{category}", categoryLabel)}</a>
+        </section>
+        <ProductExplorer products={products.filter((product) => product.category === category.slug)} heading={categoryTitle} lang={lang} />
+      </>
+    )
+  }
+
+  {
+    renderGuide && (
+      <article class="shell py-10">
+        <p class="text-sm font-black uppercase text-clay">{copy[lang].nav.guide}</p>
+        <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
+          {localizedPageCopy.guideTitle}
+        </h1>
+        <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">
+          {localizedPageCopy.guideIntro}
+        </p>
+        <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_340px]">
+          <div class="panel rounded-lg p-6">
+            <div class="prose max-w-none prose-headings:font-black prose-p:leading-8 prose-a:font-bold prose-a:text-ocean">
+              <h2>{localizedPageCopy.guideHow}</h2>
+              <p>
+                Start from the <a href={localizePath("/cssbuy-spreadsheet/", lang)}>CSSBuy spreadsheet</a> and filter by product category, price range, brand, and QC availability. A useful spreadsheet should make each find easy to scan before you open a product page, place an order, or compare it with similar listings.
+              </p>
+              <h2>{localizedPageCopy.guideCheck}</h2>
+              <p>
+                Review product photos, recent update dates, buyer notes, sizing comments, and whether QC photos are available. For clothing, compare measurements before shipping. For shoes and bags, inspect shape, material, stitching, sole details, logos, and color consistency.
+              </p>
+              <h2>{localizedPageCopy.guideCategory}</h2>
+              <p>
+                Dedicated pages for <a href={localizePath("/cssbuy-shoes/", lang)}>CSSBuy shoes</a>, <a href={localizePath("/cssbuy-hoodies/", lang)}>CSSBuy hoodies</a>, <a href={localizePath("/cssbuy-tshirts/", lang)}>CSSBuy T-shirts</a>, <a href={localizePath("/cssbuy-bags/", lang)}>bags</a>, <a href={localizePath("/cssbuy-accessories/", lang)}>accessories</a>, <a href={localizePath("/cssbuy-pants/", lang)}>pants</a>, and <a href={localizePath("/cssbuy-qc-photos/", lang)}>CSSBuy QC photos</a> give each topic a clear URL, heading, and internal link path. This helps Google understand the site structure and match long-tail searches to the most relevant page.
+              </p>
+              <h2>{localizedPageCopy.guideWorkflow}</h2>
+              <p>
+                Search broad terms first, narrow by category, then compare the remaining finds by price, QC status, and update date. Open the strongest product photos, check notes for sizing or quality warnings, and use the category pages when you want a focused list instead of the full spreadsheet.
+              </p>
+              <h2>{localizedPageCopy.guideFaq}</h2>
+              {guideFaq.map((item) => (
+                <>
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
+                </>
+              ))}
+            </div>
+          </div>
+          <aside class="panel rounded-lg p-6">
+            <h2 class="text-xl font-black">{localizedPageCopy.checklist}</h2>
+            <ul class="mt-4 grid gap-3 text-sm font-bold text-ink/75">
+              <li>Check whether QC photos are available</li>
+              <li>Compare the price against similar CSSBuy finds</li>
+              <li>Open product photos before ordering</li>
+              <li>Review update date, notes, and sizing comments</li>
+              <li>Use category pages for shoes, hoodies, T-shirts, bags, and QC photos</li>
+            </ul>
+          </aside>
+        </div>
+      </article>
+    )
+  }
+
+  {
+    renderQc && (
+      <>
+        <section class="shell py-10">
+          <p class="text-sm font-black uppercase text-clay">{copy[lang].footerQc}</p>
+          <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">{localizedPageCopy.qcTitle}</h1>
+          <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">{t.intro}</p>
+        </section>
+        <section class="shell grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {qcProducts.map((product) => (
+            <article class="panel rounded-lg overflow-hidden">
+              <img class="h-52 w-full object-cover" src={product.image} alt={getProductImageAlt(product, lang)} loading="lazy" width="640" height="426" />
+              <div class="p-5">
+                <p class="text-sm font-black uppercase text-clay">{product.category}</p>
+                <h2 class="mt-2 text-xl font-black">{product.name}</h2>
+                <p class="mt-2 text-sm font-bold text-ink/60">{product.brand} / ${product.price} / {explorer.updated} {product.updated}</p>
+                <a class="button mt-4 border border-ink bg-ink text-white" href={product.destinationUrl} rel="sponsored noopener" target="_blank">
+                  {explorer.view}
+                </a>
+              </div>
+            </article>
+          ))}
+        </section>
+      </>
+    )
+  }
+</BaseLayout>
