@@ -371,7 +371,7 @@ export const getItemListSchema = ({
     "@type": "ListItem",
     position: index + 1,
     item: {
-      "@type": "Product",
+      "@type": "Thing",
       name: getProductName(product, lang),
       url: product.destinationUrl,
       image: getProductImageUrl(product),
