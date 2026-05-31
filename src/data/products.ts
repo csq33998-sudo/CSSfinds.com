@@ -351,6 +351,31 @@ const siteUrl = "https://cssfinds.com";
 
 export const getProductImageUrl = (product: Product) => new URL(product.image, siteUrl).href;
 
+const getProductSchema = (product: Product, lang: Lang) => ({
+  "@type": "Product",
+  name: getProductName(product, lang),
+  url: product.destinationUrl,
+  image: getProductImageUrl(product),
+  description: getProductImageAlt(product, lang),
+  category: getCategoryLabel(product.category, lang),
+  brand: {
+    "@type": "Brand",
+    name: product.brand,
+  },
+  offers: {
+    "@type": "Offer",
+    url: product.destinationUrl,
+    price: product.price,
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+    seller: {
+      "@type": "Organization",
+      name: "StreetStyle",
+    },
+  },
+});
+
 export const getItemListSchema = ({
   items,
   name,
@@ -370,18 +395,7 @@ export const getItemListSchema = ({
   itemListElement: items.map((product, index) => ({
     "@type": "ListItem",
     position: index + 1,
-    item: {
-      "@type": "Thing",
-      name: getProductName(product, lang),
-      url: product.destinationUrl,
-      image: getProductImageUrl(product),
-      description: getProductImageAlt(product, lang),
-      category: getCategoryLabel(product.category, lang),
-      brand: {
-        "@type": "Brand",
-        name: product.brand,
-      },
-    },
+    item: getProductSchema(product, lang),
   })),
 });
 
