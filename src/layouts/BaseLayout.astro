@@ -11,11 +11,13 @@ type Props = {
   lang?: Lang;
 };
 
-const { title, description, canonical = Astro.url.href, schema, image = "/images/og/cssfinds-og.svg", lang = "en" } = Astro.props;
+const siteUrl = Astro.site ?? new URL("https://cssfinds.com");
+const defaultCanonical = new URL(Astro.url.pathname, siteUrl).href;
+const { title, description, canonical = defaultCanonical, schema, image = "/images/og/cssfinds-og.svg", lang = "en" } = Astro.props;
 const siteName = "CSSFinds";
 const t = copy[lang];
 const currentPath = Astro.url.pathname;
-const absoluteUrl = (path: string) => new URL(path, Astro.site ?? "https://cssfinds.com").href;
+const absoluteUrl = (path: string) => new URL(path, siteUrl).href;
 const socialImage = absoluteUrl(image);
 ---
 
