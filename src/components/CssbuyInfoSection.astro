@@ -1,0 +1,65 @@
+---
+import { localizePath, type Lang } from "@/data/i18n";
+
+type Props = {
+  lang?: Lang;
+};
+
+const { lang = "en" } = Astro.props;
+---
+
+<section class="shell mt-16" aria-labelledby="what-is-cssbuy-heading">
+  <div class="rounded-lg border border-line bg-white p-5 shadow-sm md:p-7">
+    <div class="max-w-4xl">
+      <p class="text-sm font-black uppercase text-clay">CSSBuy basics</p>
+      <h2 id="what-is-cssbuy-heading" class="mt-2 text-2xl font-black leading-tight tracking-normal text-ink md:text-3xl">
+        What is Cssbuy?
+      </h2>
+      <p class="mt-4 text-base leading-7 text-ink/70">
+        CSSBuy is a China shopping agent used by international shoppers to buy from marketplaces such as Taobao, Weidian, and 1688. Instead of ordering every item directly, shoppers can use CSSBuy to place orders, receive items at a warehouse, check QC photos, consolidate parcels, and choose an international shipping line.
+      </p>
+    </div>
+
+    <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <article class="rounded-lg border border-line bg-paper p-4">
+        <h3 class="text-base font-black text-ink">Product access</h3>
+        <p class="mt-2 text-sm leading-6 text-ink/65">
+          Browse clothing, shoes, bags, accessories, and other finds from Chinese marketplace links.
+        </p>
+      </article>
+      <article class="rounded-lg border border-line bg-paper p-4">
+        <h3 class="text-base font-black text-ink">QC photos</h3>
+        <p class="mt-2 text-sm leading-6 text-ink/65">
+          Review warehouse photos before shipping so you can check color, shape, logos, stitching, and sizing details.
+        </p>
+      </article>
+      <article class="rounded-lg border border-line bg-paper p-4">
+        <h3 class="text-base font-black text-ink">Parcel handling</h3>
+        <p class="mt-2 text-sm leading-6 text-ink/65">
+          Combine multiple items into one parcel, estimate shipping, and pick a route that fits your budget and timing.
+        </p>
+      </article>
+      <article class="rounded-lg border border-line bg-paper p-4">
+        <h3 class="text-base font-black text-ink">Research first</h3>
+        <p class="mt-2 text-sm leading-6 text-ink/65">
+          CSSFinds helps you compare product cards, prices, categories, and QC-ready finds before opening agent links.
+        </p>
+      </article>
+    </div>
+
+    <div class="mt-6 rounded-lg border border-line bg-white p-4">
+      <h3 class="text-lg font-black text-ink">How CSSFinds fits in</h3>
+      <p class="mt-2 text-sm leading-6 text-ink/68">
+        CSSFinds is an independent spreadsheet-style discovery site. It is not the official CSSBuy website, but it helps shoppers organize CSSBuy-related finds by category, product image, converted USD price, status, update date, and quick View links.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-2 text-sm font-bold">
+        <a class="rounded-md border border-ink bg-ink px-3 py-2 text-white" href={localizePath("/cssbuy-spreadsheet/", lang)}>
+          Open CSSBuy spreadsheet
+        </a>
+        <a class="rounded-md border border-line px-3 py-2 text-ink/75 hover:border-ink hover:text-ink" href={localizePath("/cssbuy-qc-photos/", lang)}>
+          QC photo guide
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

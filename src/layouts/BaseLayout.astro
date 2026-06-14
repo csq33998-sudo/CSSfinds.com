@@ -62,8 +62,9 @@ const socialImage = absoluteUrl(image);
         <div class="flex flex-wrap items-center justify-end gap-2 text-sm font-bold">
           <div class="hidden items-center gap-2 md:flex">
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/", lang)}>{t.nav.home}</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={`${localizePath("/", lang)}#latest-products-heading`}>{t.nav.spreadsheet}</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={`${localizePath("/", lang)}#faq-heading`}>{t.nav.faq}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/faq/", lang)}>{t.nav.faq}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/blog/", lang)}>{t.nav.blog}</a>
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet-guide/", lang)}>{t.nav.guide}</a>
           </div>
           <label class="sr-only" for="language-select">{t.nav.language}</label>
@@ -92,6 +93,7 @@ const socialImage = absoluteUrl(image);
         </div>
         <div class="flex flex-wrap gap-2 text-sm font-bold text-ink/70">
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/blog/", lang)}>{t.nav.blog}</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-qc-photos/", lang)}>{t.footerQc}</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/robots.txt">{t.footerRobots}</a>
         </div>

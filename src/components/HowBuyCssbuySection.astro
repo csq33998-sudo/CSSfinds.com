@@ -1,0 +1,144 @@
+---
+import { localizePath, type Lang } from "@/data/i18n";
+
+type Props = {
+  lang?: Lang;
+};
+
+const { lang = "en" } = Astro.props;
+---
+
+<section aria-labelledby="how-buy-cssbuy-heading">
+  <h2 id="how-buy-cssbuy-heading">How do I buy from Cssbuy?</h2>
+  <p>
+    Shopping through CSSBuy is easier when you separate the process into research, ordering, warehouse QC, and international shipping. CSSFinds supports the research step by organizing spreadsheet-style product cards, categories, prices, QC-ready finds, and quick links before you continue to CSSBuy or another destination.
+  </p>
+
+  <h3>Step-by-step guide to shopping on CSSBuy</h3>
+  <p>
+    The goal is to find the right item first, verify the listing, then use CSSBuy as the agent that purchases, receives, photographs, stores, and ships the item for you.
+  </p>
+
+  <h3>1. Finding the right items</h3>
+  <p>
+    Start from the <a href={localizePath("/cssbuy-spreadsheet/", lang)}>CSSBuy spreadsheet</a> or a focused CSSFinds category page. Use product photos, category labels, status, update date, converted price, and views to decide which finds are worth checking.
+  </p>
+  <ul>
+    <li><strong>CSSFinds categories:</strong> Browse <a href={localizePath("/cssbuy-shoes/", lang)}>shoes</a>, <a href={localizePath("/cssbuy-hoodies/", lang)}>hoodies</a>, <a href={localizePath("/cssbuy-tshirts/", lang)}>T-shirts</a>, <a href={localizePath("/cssbuy-bags/", lang)}>bags</a>, <a href={localizePath("/cssbuy-accessories/", lang)}>accessories</a>, and <a href={localizePath("/cssbuy-pants/", lang)}>pants</a> instead of scanning one oversized list.</li>
+    <li><strong>Community research:</strong> Discord, Telegram, Reddit, Yupoo albums, and user spreadsheets can help you compare batches, photos, and buyer feedback.</li>
+    <li><strong>Why it helps:</strong> CSSBuy acts as a shopping agent, so product research before ordering reduces mistakes with size, color, batch, and seller links.</li>
+  </ul>
+
+  <h3>2. Using product links and reverse image search</h3>
+  <ul>
+    <li><strong>Product links:</strong> Open the product card's View button, inspect the listing, then copy the product URL into CSSBuy if you want to order it through an agent.</li>
+    <li><strong>Reverse image search:</strong> If you only have a photo, use marketplace image search or CSSBuy search tools to find similar listings.</li>
+    <li><strong>Tip:</strong> Reverse image search is useful for hard-to-find items, but always compare the seller photos and options before paying.</li>
+  </ul>
+
+  <h3>3. Reviewing product details</h3>
+  <p>
+    Before placing an order, check the size, color, material, variation, seller notes, domestic shipping, and estimated weight. For apparel, compare measurements. For shoes and bags, compare shape, stitching, logo placement, sole details, and material texture.
+  </p>
+
+  <h3>4. Viewing quality control (QC) photos</h3>
+  <p>
+    After the item arrives at the CSSBuy warehouse, review QC photos before international shipping. Inspect color, tags, stitching, logos, print placement, shape, obvious flaws, and whether the warehouse photos match the product you expected.
+  </p>
+  <ul>
+    <li><strong>Request extra photos:</strong> If sizing labels, logos, soles, pockets, or defects are unclear, request additional photos before approving shipment.</li>
+    <li><strong>Inspect carefully:</strong> QC photos help you catch visible problems before the parcel leaves the warehouse.</li>
+  </ul>
+
+  <h3>5. Estimating costs</h3>
+  <p>
+    Use CSSBuy's estimates to plan your budget. Include item price, domestic shipping, service fees, international shipping, packaging choices, and possible local taxes or import fees.
+  </p>
+  <ul>
+    <li><strong>Add items to your cart:</strong> Review weight, size, quantity, selected options, and estimated shipping fees.</li>
+    <li><strong>Optimize packaging:</strong> Removing unnecessary packaging, such as shoeboxes, may reduce shipping volume and cost.</li>
+  </ul>
+
+  <h3>6. Placing your order</h3>
+  <ol>
+    <li><strong>Add items to your cart:</strong> Double-check product options and notes.</li>
+    <li><strong>Enter order details:</strong> Confirm size, color, quantity, and any agent instructions.</li>
+    <li><strong>Choose payment method:</strong> Pay for the item order or top up your CSSBuy balance if needed.</li>
+  </ol>
+
+  <h3>7. Order processing stages</h3>
+  <ul>
+    <li><strong>Process pending:</strong> The order is waiting for review or agent handling.</li>
+    <li><strong>Purchased:</strong> The agent has placed the order with the seller.</li>
+    <li><strong>Seller sent:</strong> The seller has shipped the item to the warehouse.</li>
+    <li><strong>Warehouse received:</strong> The item has arrived and QC photos can be uploaded for review.</li>
+  </ul>
+
+  <h3>8. Quality check and shipping selection</h3>
+  <p>
+    If the QC photos look acceptable, approve the item for shipment. Then consolidate approved items into one parcel, compare shipping lines, check estimated delivery time, and choose the route that fits your budget and risk tolerance.
+  </p>
+
+  <h3>9. Finalizing the shipment</h3>
+  <ul>
+    <li><strong>Confirm shipment:</strong> Review address, parcel contents, declared information, packaging, and shipping line before submitting.</li>
+    <li><strong>Receive tracking:</strong> Keep the tracking number and monitor the parcel until delivery.</li>
+  </ul>
+
+  <h3>Pro tips for a smoother shopping experience</h3>
+  <ul>
+    <li><strong>Use curated spreadsheets:</strong> CSSFinds makes it easier to compare products by category, image, price, status, and update date.</li>
+    <li><strong>Compare multiple sources:</strong> Check community comments, Yupoo albums, marketplace listings, and QC photos before deciding.</li>
+    <li><strong>Inspect QC photos thoroughly:</strong> If something looks unclear, request more photos before shipping internationally.</li>
+    <li><strong>Manage shipping costs early:</strong> Weight, volume, packaging, and shipping line can affect the final total more than the product price alone.</li>
+  </ul>
+
+  <h3>About CSSFinds</h3>
+  <p>
+    CSSFinds is a user-focused, spreadsheet-style product discovery site built to help shoppers research CSSBuy-related finds more efficiently. It provides product organization, category pages, QC-photo guidance, price comparison signals, and educational resources for shoppers who want to make more informed decisions.
+  </p>
+
+  <h3>Key features and disclaimers</h3>
+  <h4>Independent platform</h4>
+  <ul>
+    <li><strong>Third-party resource:</strong> CSSFinds operates independently and is not officially affiliated with CSSBuy, Taobao, Weidian, 1688, Yupoo, StreetStyle, or any associated marketplace brand.</li>
+    <li><strong>Primary purpose:</strong> The platform provides product research, category organization, comparison notes, and shopping workflow guidance for CSSBuy-related finds.</li>
+  </ul>
+
+  <h4>Information-only service</h4>
+  <ul>
+    <li><strong>Non-transactional:</strong> CSSFinds does not sell products, process payments, inspect goods, purchase items, or handle international shipping.</li>
+    <li><strong>Guidance-oriented:</strong> The site is designed to help users discover and evaluate products before they decide whether to order through CSSBuy or another service.</li>
+  </ul>
+
+  <h4>User responsibility</h4>
+  <ul>
+    <li><strong>Verification required:</strong> Shoppers are responsible for checking product details, seller information, sizing, QC photos, shipping costs, and local import rules.</li>
+    <li><strong>External purchase risk:</strong> Product availability, prices, photos, shipping routes, and seller pages can change after a product appears on CSSFinds.</li>
+  </ul>
+
+  <h4>Affiliate links</h4>
+  <ul>
+    <li><strong>Platform support:</strong> Some outbound links may be sponsored or affiliate links connected to shopping destinations or services.</li>
+    <li><strong>Transparency:</strong> CSSFinds aims to organize useful product research signals; users should still verify every external listing independently.</li>
+  </ul>
+
+  <h4>External content disclaimer</h4>
+  <ul>
+    <li><strong>Third-party content:</strong> CSSFinds is not responsible for inaccuracies, removed listings, changed prices, or outdated information on external websites.</li>
+    <li><strong>Verification encouraged:</strong> Always verify product details and QC photos before paying for an item or approving international shipment.</li>
+  </ul>
+
+  <h3>Why use CSSFinds with CSSBuy?</h3>
+  <ul>
+    <li><strong>Streamlined discovery:</strong> Find shoes, hoodies, T-shirts, bags, accessories, pants, and QC-ready items from focused pages.</li>
+    <li><strong>Faster comparison:</strong> Review product photos, converted USD prices, update dates, availability labels, and views before opening links.</li>
+    <li><strong>Freight-forwarding insights:</strong> Use QC and shipping guidance to understand why product price, parcel weight, packaging, and shipping route all affect the final cost.</li>
+    <li><strong>No checkout handled here:</strong> CSSFinds is a research resource, so final product costs, service fees, and shipping fees are determined by the external destination or agent service.</li>
+  </ul>
+
+  <h3>Conclusion</h3>
+  <p>
+    Buying from CSSBuy can be efficient when you research carefully, verify product details, inspect QC photos, and plan shipping costs before finalizing your parcel. CSSFinds helps with the research side so you can move through the CSSBuy process with clearer expectations.
+  </p>
+</section>

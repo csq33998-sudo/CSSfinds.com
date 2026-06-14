@@ -1,0 +1,18 @@
+---
+import BlogIndex from "@/components/BlogIndex.astro";
+import { blogDescription, blogTitle, getBlogSchema } from "@/data/blog";
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const schema = [
+  getBlogSchema("https://cssfinds.com/blog/"),
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "Blog", url: "https://cssfinds.com/blog/" },
+  ]),
+];
+---
+
+<BaseLayout title={blogTitle} description={blogDescription} schema={schema}>
+  <BlogIndex />
+</BaseLayout>

@@ -1,4 +1,5 @@
 ---
+import HowBuyCssbuySection from "@/components/HowBuyCssbuySection.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getBreadcrumbSchema } from "@/data/products";
 
@@ -63,7 +64,7 @@ const schema = [
       CSSBuy Spreadsheet Guide for finds, QC photos, and category research
     </h1>
     <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">
-      Use this guide to read the CSSFinds spreadsheet like a product research index: compare CSSBuy shoes, hoodies, T-shirts, bags, accessories, pants, prices, QC photo status, and recent update signals before you continue to StreetStyle.
+      Use this guide to read the CSSFinds spreadsheet like a product research index: compare CSSBuy shoes, hoodies, T-shirts, bags, accessories, pants, prices, QC photo status, and recent update signals before you open a product destination.
     </p>
     <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_340px]">
       <div class="panel rounded-lg p-6">
@@ -84,6 +85,7 @@ const schema = [
           <p>
             Search broad terms first, narrow by category, then compare the remaining finds by price, QC status, and update date. Open the strongest product photos, check notes for sizing or quality warnings, and use the category pages when you want a focused list instead of the full spreadsheet.
           </p>
+          <HowBuyCssbuySection />
           <h2>Frequently asked questions</h2>
           {faq.map((item) => (
             <>

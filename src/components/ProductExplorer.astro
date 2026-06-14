@@ -31,17 +31,9 @@ const getViews = (product: Product) => {
 };
 ---
 
-<section id={explorerId} class="shell mt-10" aria-labelledby="latest-products-heading" data-product-explorer>
-  <div class="flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <h2 id="latest-products-heading" class="text-3xl font-black tracking-normal md:text-4xl">{heading}</h2>
-      <p class="mt-2 text-sm font-bold text-ink/55">{intro}</p>
-    </div>
-    <p class="text-sm font-black uppercase text-clay" data-product-count>{latestProducts.length} {t.items}</p>
-  </div>
-
+<section id={explorerId} class="shell mt-4" aria-labelledby="latest-products-heading" data-product-explorer>
   <form
-    class="mt-6 flex w-full max-w-5xl overflow-hidden rounded-lg border border-line bg-white shadow-sm"
+    class="mb-8 flex w-full overflow-hidden rounded-lg border border-line bg-white shadow-sm"
     action="https://streetstyle.maisonlooks.com/en/search"
     method="get"
     target="_blank"
@@ -64,6 +56,14 @@ const getViews = (product: Product) => {
       {streetStyleSearch.button}
     </button>
   </form>
+
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h2 id="latest-products-heading" class="text-3xl font-black tracking-normal md:text-4xl">{heading}</h2>
+      <p class="mt-2 text-sm font-bold text-ink/55">{intro}</p>
+    </div>
+    <p class="text-sm font-black uppercase text-clay" data-product-count>{latestProducts.length} {t.items}</p>
+  </div>
 
   <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
     {

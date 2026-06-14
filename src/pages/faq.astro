@@ -1,0 +1,17 @@
+---
+import FaqSection from "@/components/FaqSection.astro";
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "CSSBuy Spreadsheet FAQ - CSSBuy Finds, QC Photos and Product Links";
+const description =
+  "Answers about CSSBuy spreadsheet finds, QC photos, product links, categories, and how to compare CSSBuy products before shopping.";
+const schema = getBreadcrumbSchema([
+  { name: "CSSFinds", url: "https://cssfinds.com/" },
+  { name: "FAQ", url: "https://cssfinds.com/faq/" },
+]);
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <FaqSection />
+</BaseLayout>

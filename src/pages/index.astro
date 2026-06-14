@@ -1,8 +1,9 @@
 ---
+import CssbuyInfoSection from "@/components/CssbuyInfoSection.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import ProductExplorer from "@/components/ProductExplorer.astro";
 import { copy } from "@/data/i18n";
-import { categories, getBreadcrumbSchema, getItemListSchema, getProductImageAlt, products, promotionUrl } from "@/data/products";
+import { categories, getBreadcrumbSchema, getItemListSchema, products, promotionUrl } from "@/data/products";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 const lang = "en";
@@ -33,55 +34,29 @@ const schema = [
 ---
 
 <BaseLayout title={title} description={description} schema={schema} lang={lang}>
-  <section class="shell grid gap-8 py-10 lg:grid-cols-[1fr_420px] lg:items-center lg:py-14">
-    <div>
+  <section
+    class="relative overflow-hidden bg-ink bg-cover bg-center text-white"
+    style="background-image: linear-gradient(90deg, rgba(17, 24, 39, 0.86) 0%, rgba(17, 24, 39, 0.64) 42%, rgba(17, 24, 39, 0.18) 100%), url('/images/hero/cssbuy-shipping-hero.png');"
+  >
+    <div class="shell py-14 md:py-20 lg:py-24">
       <div class="flex flex-wrap gap-2">
         <span class="tag border-ink bg-ink text-white">{t.badgeUpdated}</span>
-        <span class="tag">{t.badgeSpreadsheet}</span>
-        <span class="tag">{t.badgeQc}</span>
+        <span class="tag border-white/35 bg-white/92 text-ink">{t.badgeSpreadsheet}</span>
+        <span class="tag border-white/35 bg-white/92 text-ink">{t.badgeQc}</span>
       </div>
-      <h1 class="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
+      <h1 class="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-normal drop-shadow-sm md:text-5xl">
         {t.h1}
       </h1>
-      <p class="mt-5 max-w-3xl text-base leading-7 text-ink/70 md:text-lg">
+      <p class="mt-5 max-w-3xl text-base leading-7 text-white/86 md:text-lg">
         {t.intro}
       </p>
-      <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-ink/60" aria-label="Popular CSSBuy spreadsheet searches">
-        <span class="text-ink">Popular searches:</span>
-        {popularQueries.map((query) => <span class="rounded-full border border-line bg-white px-3 py-1">{query}</span>)}
+      <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-white/78" aria-label="Popular CSSBuy spreadsheet searches">
+        <span class="text-white">Popular searches:</span>
+        {popularQueries.map((query) => <span class="rounded-full border border-white bg-white px-3 py-1 text-ink shadow-sm">{query}</span>)}
       </div>
       <div class="mt-6 flex flex-wrap gap-3">
-        <a class="button bg-ink text-white" href="#latest-products-heading">{t.browse}</a>
-        <a class="button border border-line bg-white text-ink hover:border-ink" href={promotionUrl} rel="sponsored noopener" target="_blank">{t.visit}</a>
-      </div>
-    </div>
-    <div class="panel overflow-hidden rounded-lg">
-      <div class="grid grid-cols-3 gap-px bg-line">
-        {
-          products.slice(0, 3).map((product) => (
-            <img
-              class="aspect-square h-full w-full bg-white object-cover"
-              src={product.image}
-              alt={getProductImageAlt(product)}
-              width="180"
-              height="180"
-            />
-          ))
-        }
-      </div>
-      <div class="grid grid-cols-3 divide-x divide-line border-t border-line bg-white text-center">
-        <div class="p-4">
-          <p class="text-2xl font-black">{products.length}</p>
-          <p class="text-xs font-bold text-ink/55">{t.sampleFinds}</p>
-        </div>
-        <div class="p-4">
-          <p class="text-2xl font-black">{categories.length}</p>
-          <p class="text-xs font-bold text-ink/55">{t.categories}</p>
-        </div>
-        <div class="p-4">
-          <p class="text-2xl font-black">80%</p>
-          <p class="text-xs font-bold text-ink/55">{t.qcTagged}</p>
-        </div>
+        <a class="button bg-white text-ink" href="#latest-products-heading">{t.browse}</a>
+        <a class="button border border-white/40 bg-white/12 text-white hover:border-white" href={promotionUrl} rel="sponsored noopener" target="_blank">{t.visit}</a>
       </div>
     </div>
   </section>
@@ -106,4 +81,5 @@ const schema = [
     </div>
   </section>
   <FaqSection lang={lang} />
+  <CssbuyInfoSection lang={lang} />
 </BaseLayout>
