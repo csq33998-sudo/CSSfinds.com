@@ -3,6 +3,13 @@ import { createServer } from "node:http";
 import { extname, join, normalize, relative, resolve } from "node:path";
 
 const root = resolve("dist");
+const host = process.env.HOST ?? "127.0.0.1";
+const port = Number.parseInt(process.env.PORT ?? "4321", 10);
+
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  throw new Error(`Invalid PORT value: ${process.env.PORT}`);
+}
+
 const types = new Map([
   [".html", "text/html; charset=utf-8"],
   [".css", "text/css; charset=utf-8"],
@@ -47,6 +54,15 @@ const server = createServer((request, response) => {
   createReadStream(filePath).pipe(response);
 });
 
-server.listen(4321, "127.0.0.1", () => {
-  console.log("Serving dist at http://127.0.0.1:4321/");
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Cannot serve dist: http://${host}:${port}/ is already in use.`);
+    process.exit(1);
+  }
+
+  throw error;
+});
+
+server.listen(port, host, () => {
+  console.log(`Serving dist at http://${host}:${port}/`);
 });

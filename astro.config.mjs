@@ -6,7 +6,10 @@ export default defineConfig({
   site: "https://cssfinds.com",
   integrations: [tailwind(), sitemap()],
   vite: {
+    cacheDir: ".vite-cache",
     optimizeDeps: {
+      entries: [],
+      noDiscovery: true,
       exclude: ["aria-query", "axobject-query", "cssesc"],
     },
   },

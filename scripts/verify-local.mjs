@@ -30,6 +30,8 @@ const chromeCandidates = [
 ].filter(Boolean);
 const executablePath = chromeCandidates.find((candidate) => existsSync(candidate));
 const { chromium } = playwright;
+const baseUrl = (process.env.BASE_URL ?? "http://127.0.0.1:4321").replace(/\/$/, "");
+const localizedPath = (path) => `${baseUrl}${path}`;
 
 const browser = await chromium.launch({
   ...(executablePath ? { executablePath } : {}),
@@ -45,7 +47,7 @@ page.on("console", (message) => {
   }
 });
 
-await page.goto("http://127.0.0.1:4321/", { waitUntil: "domcontentloaded" });
+await page.goto(localizedPath("/"), { waitUntil: "domcontentloaded" });
 await page.locator("h1").first().waitFor();
 const title = await page.title();
 const h1 = await page.locator("h1").first().innerText();
@@ -54,7 +56,7 @@ const languageOptions = await page.locator("#language-select option").evaluateAl
   options.map((option) => option.textContent?.trim()),
 );
 await page.selectOption("#language-select", "/de/");
-await page.waitForURL("**/de/");
+await page.waitForURL(`${baseUrl}/de/`);
 const germanH1 = await page.locator("h1").first().innerText();
 const searchAction = await page.locator("[data-streetstyle-search]").first().getAttribute("action");
 const searchInputName = await page.locator("[data-streetstyle-search-input]").first().getAttribute("name");
@@ -62,7 +64,7 @@ const visibleProductCount = await page.locator("[data-product-row]:visible").cou
 const hreflangCount = await page.locator('link[rel="alternate"]').count();
 await page.screenshot({ path: "artifacts-home.png", fullPage: true });
 
-await page.goto("http://127.0.0.1:4321/cssbuy-spreadsheet/", { waitUntil: "domcontentloaded" });
+await page.goto(localizedPath("/cssbuy-spreadsheet/"), { waitUntil: "domcontentloaded" });
 await page.locator("h1").first().waitFor();
 const categoryHref = await page.locator("a", { hasText: "CSSBuy Shoes Spreadsheet" }).first().getAttribute("href");
 const productHref = await page.locator("[data-product-row] a").first().getAttribute("href");
@@ -72,7 +74,7 @@ const linksUseEnglishStore = [cta, productHref].every((href) =>
 await page.screenshot({ path: "artifacts-spreadsheet.png", fullPage: true });
 
 await page.setViewportSize({ width: 390, height: 1200 });
-await page.goto("http://127.0.0.1:4321/", { waitUntil: "domcontentloaded" });
+await page.goto(localizedPath("/"), { waitUntil: "domcontentloaded" });
 await page.locator("h1").first().waitFor();
 const mobileHorizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
 await page.screenshot({ path: "artifacts-home-mobile.png", fullPage: true });
