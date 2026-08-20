@@ -7,6 +7,7 @@ const description =
   "Browse a curated CSSBuy spreadsheet preview with QC photo links, shoes spreadsheet picks, hoodie finds, accessories, electronics, W2C links, and recently updated product rows.";
 
 const cnyRate = 7.25;
+const priceValidFrom = "2026-08-20T00:00:00+08:00";
 const priceValidUntil = "2027-12-31";
 
 const finds = [
@@ -105,10 +106,44 @@ const schema = [
             "@type": "Offer",
             price: item.priceUsd,
             priceCurrency: "USD",
+            validFrom: priceValidFrom,
             priceValidUntil,
             availability: "https://schema.org/InStock",
             itemCondition: "https://schema.org/NewCondition",
             url: item.affiliateUrl,
+            shippingDetails: {
+              "@type": "OfferShippingDetails",
+              shippingRate: {
+                "@type": "MonetaryAmount",
+                value: "0",
+                currency: "USD",
+              },
+              shippingDestination: {
+                "@type": "DefinedRegion",
+                addressCountry: "US",
+              },
+              deliveryTime: {
+                "@type": "ShippingDeliveryTime",
+                handlingTime: {
+                  "@type": "QuantitativeValue",
+                  minValue: 1,
+                  maxValue: 3,
+                  unitCode: "DAY",
+                },
+                transitTime: {
+                  "@type": "QuantitativeValue",
+                  minValue: 7,
+                  maxValue: 21,
+                  unitCode: "DAY",
+                },
+              },
+            },
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              applicableCountry: "US",
+              returnPolicyCountry: "US",
+              returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+            },
             seller: {
               "@type": "Organization",
               name: "StreetStyle",

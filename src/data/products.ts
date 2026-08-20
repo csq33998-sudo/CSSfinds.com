@@ -2834,6 +2834,7 @@ export const getProductImageAlt = (product: Product, lang: Lang = "en") => {
 };
 
 const siteUrl = "https://cssfinds.com";
+const priceValidFrom = "2026-08-20T00:00:00+08:00";
 const priceValidUntil = "2027-12-31";
 
 export const getProductImageUrl = (product: Product) => new URL(product.image, siteUrl).href;
@@ -2859,9 +2860,43 @@ const getProductSchema = (product: Product, lang: Lang) => ({
     url: product.destinationUrl,
     price: product.price,
     priceCurrency: "USD",
+    validFrom: priceValidFrom,
     priceValidUntil,
     availability: "https://schema.org/InStock",
     itemCondition: "https://schema.org/NewCondition",
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingRate: {
+        "@type": "MonetaryAmount",
+        value: "0",
+        currency: "USD",
+      },
+      shippingDestination: {
+        "@type": "DefinedRegion",
+        addressCountry: "US",
+      },
+      deliveryTime: {
+        "@type": "ShippingDeliveryTime",
+        handlingTime: {
+          "@type": "QuantitativeValue",
+          minValue: 1,
+          maxValue: 3,
+          unitCode: "DAY",
+        },
+        transitTime: {
+          "@type": "QuantitativeValue",
+          minValue: 7,
+          maxValue: 21,
+          unitCode: "DAY",
+        },
+      },
+    },
+    hasMerchantReturnPolicy: {
+      "@type": "MerchantReturnPolicy",
+      applicableCountry: "US",
+      returnPolicyCountry: "US",
+      returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+    },
     seller: {
       "@type": "Organization",
       name: "StreetStyle",

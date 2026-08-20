@@ -6,6 +6,7 @@ const title = "New Arrivals & Recent Finds | CSSBuy Spreadsheet Updates";
 const description =
   "Browse recent CSSBuy spreadsheet arrivals, just-added sneakers, restocked hoodies, rare accessories, QC-ready products, and limited W2C links.";
 const pageUpdated = "2026-08-19";
+const priceValidFrom = "2026-08-20T00:00:00+08:00";
 const priceValidUntil = "2027-12-31";
 
 const updates = [
@@ -107,10 +108,44 @@ const schema = [
             "@type": "Offer",
             price: item.priceUsd,
             priceCurrency: "USD",
+            validFrom: priceValidFrom,
             priceValidUntil,
             availability: "https://schema.org/LimitedAvailability",
             itemCondition: "https://schema.org/NewCondition",
             url: item.buyUrl,
+            shippingDetails: {
+              "@type": "OfferShippingDetails",
+              shippingRate: {
+                "@type": "MonetaryAmount",
+                value: "0",
+                currency: "USD",
+              },
+              shippingDestination: {
+                "@type": "DefinedRegion",
+                addressCountry: "US",
+              },
+              deliveryTime: {
+                "@type": "ShippingDeliveryTime",
+                handlingTime: {
+                  "@type": "QuantitativeValue",
+                  minValue: 1,
+                  maxValue: 3,
+                  unitCode: "DAY",
+                },
+                transitTime: {
+                  "@type": "QuantitativeValue",
+                  minValue: 7,
+                  maxValue: 21,
+                  unitCode: "DAY",
+                },
+              },
+            },
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              applicableCountry: "US",
+              returnPolicyCountry: "US",
+              returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+            },
             seller: {
               "@type": "Organization",
               name: "StreetStyle",
