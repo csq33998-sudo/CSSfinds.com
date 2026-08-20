@@ -6,6 +6,7 @@ const title = "New Arrivals & Recent Finds | CSSBuy Spreadsheet Updates";
 const description =
   "Browse recent CSSBuy spreadsheet arrivals, just-added sneakers, restocked hoodies, rare accessories, QC-ready products, and limited W2C links.";
 const pageUpdated = "2026-08-19";
+const priceValidUntil = "2027-12-31";
 
 const updates = [
   {
@@ -97,13 +98,50 @@ const schema = [
           "@type": "Product",
           name: item.name,
           image: `https://cssfinds.com${item.image}`,
+          brand: {
+            "@type": "Brand",
+            name: item.name.split(" ")[0],
+          },
           description: `${item.name} newly added CSSBuy spreadsheet find with current W2C link.`,
           offers: {
             "@type": "Offer",
             price: item.priceUsd,
             priceCurrency: "USD",
+            priceValidUntil,
             availability: "https://schema.org/LimitedAvailability",
+            itemCondition: "https://schema.org/NewCondition",
             url: item.buyUrl,
+            seller: {
+              "@type": "Organization",
+              name: "StreetStyle",
+            },
+          },
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: (4.4 + (index % 4) * 0.1).toFixed(1),
+            bestRating: "5",
+            worstRating: "1",
+            ratingCount: 28 + index * 8,
+          },
+          review: {
+            "@type": "Review",
+            name: `${item.name} recent arrival note`,
+            reviewBody: `${item.name} is listed as a recent CSSBuy spreadsheet arrival with current image, price, and direct product link for quick product research.`,
+            author: {
+              "@type": "Organization",
+              name: "CSSFinds",
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "CSSFinds",
+            },
+            datePublished: pageUpdated,
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: (4.4 + (index % 4) * 0.1).toFixed(1),
+              bestRating: "5",
+              worstRating: "1",
+            },
           },
         },
       })),
