@@ -1,0 +1,244 @@
+---
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "How to Buy on CSSBuy (2026 Guide) | Save on Shipping";
+const description =
+  "Learn how to buy on CSSBuy in 2026 with a beginner-friendly step-by-step guide. Create an account, browse the CSSBuy spreadsheet, paste W2C links, check QC photos, and save on international shipping with registration coupons.";
+
+const cssbuySignupUrl = import.meta.env.PUBLIC_CSSBUY_SIGNUP_URL ?? "https://cssb.uy/1UOp";
+
+const steps = [
+  {
+    number: "Step 1",
+    title: "Create an Account",
+    eyebrow: "Start with coupons",
+    body:
+      "Open CSSBuy through our invite link before you shop. New users can unlock shipping coupons and account perks that help lower the real cost of their first haul, especially when shipping sneakers, hoodies, and heavier streetwear pieces.",
+    actionLabel: "Sign Up CSSBuy Now",
+    actionUrl: cssbuySignupUrl,
+    accent: "bg-[#ff4b0b] text-white",
+  },
+  {
+    number: "Step 2",
+    title: "Browse Our Spreadsheet",
+    eyebrow: "Pick smarter finds",
+    body:
+      "Use the CSSFinds spreadsheet view to compare trending items by photo, batch, price, category, and QC availability. Start with shoes, hoodies, accessories, or electronics, then shortlist only the pieces that look worth checking on CSSBuy.",
+    actionLabel: "Browse CSSBuy Finds",
+    actionUrl: "/finds/",
+    accent: "bg-ink text-white",
+  },
+  {
+    number: "Step 3",
+    title: "Copy & Paste",
+    eyebrow: "Move the link into CSSBuy",
+    body:
+      "When you find an item you like, copy the W2C product link and paste it into the CSSBuy search bar. CSSBuy will read the listing so you can choose size, color, quantity, and any notes for the agent before paying.",
+    actionLabel: "Open Finds",
+    actionUrl: "/finds/",
+    accent: "bg-white text-ink border border-ink",
+  },
+  {
+    number: "Step 4",
+    title: "Pay & Ship",
+    eyebrow: "QC first, ship after",
+    body:
+      "Pay for the item, wait for it to arrive at the CSSBuy warehouse, then inspect QC photos before international shipping. Once everything looks right, consolidate your parcel, compare shipping lines, apply coupons, and ship it home.",
+    actionLabel: "See QC Guide",
+    actionUrl: "/qc/",
+    accent: "bg-white text-ink border border-line",
+  },
+];
+
+const faqs = [
+  {
+    question: "How expensive is CSSBuy shipping?",
+    answer:
+      "Shipping depends on parcel weight, volume, destination country, packaging choices, and the shipping line you choose. Shoes with boxes and heavy hoodies cost more to ship, while removing bulky packaging can sometimes reduce the final price.",
+  },
+  {
+    question: "How long does CSSBuy delivery take?",
+    answer:
+      "Most hauls take roughly 1 to 4 weeks after international shipment, depending on your country, customs, carrier speed, and the route selected. The full timeline also includes seller shipping time to the CSSBuy warehouse.",
+  },
+  {
+    question: "Do I need to check QC photos before shipping?",
+    answer:
+      "Yes. QC photos are your chance to inspect color, shape, size labels, stitching, logos, packaging, and obvious flaws before the parcel leaves the warehouse. Request extra photos if anything important is unclear.",
+  },
+  {
+    question: "Can I use a CSSBuy spreadsheet if I am a beginner?",
+    answer:
+      "Yes. Start with a curated spreadsheet page, open one item at a time, compare price and batch notes, then paste the W2C link into CSSBuy. The process is much easier when you follow a small checklist instead of browsing random links.",
+  },
+  {
+    question: "Why should I register before browsing products?",
+    answer:
+      "Registering first lets you keep saved items, prepare your cart, and claim any new-user coupons tied to the invite link. That makes it easier to compare the real cost after item price, service fees, and shipping.",
+  },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Buy on CSSBuy",
+    description,
+    totalTime: "P14D",
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.body,
+      url: "https://cssfinds.com/how-to-buy/",
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "How to Buy on CSSBuy", url: "https://cssfinds.com/how-to-buy/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} canonical="https://cssfinds.com/how-to-buy/" schema={schema} lang="en">
+  <section class="border-b border-line bg-white">
+    <div class="shell grid gap-8 py-8 md:py-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <div>
+        <p class="text-sm font-black uppercase text-ocean">Beginner CSSBuy guide</p>
+        <h1 class="mt-3 max-w-4xl text-3xl font-black leading-tight tracking-normal text-ink md:text-5xl">
+          How to Buy on CSSBuy and Save on Shipping in 2026
+        </h1>
+        <p class="mt-4 max-w-3xl text-base leading-7 text-ink/70 md:text-lg">
+          A simple, no-confusion walkthrough for turning spreadsheet finds into real CSSBuy orders: register, pick your item, paste the link, review QC photos, apply coupons, and ship your haul.
+        </p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <!-- PUBLIC_CSSBUY_SIGNUP_URL can override the default CSSBuy invite link. -->
+          <a class="button min-h-14 bg-[#ff4b0b] px-6 text-base font-black text-white shadow-[0_14px_30px_rgba(255,75,11,0.3)] hover:bg-[#e83f00]" href={cssbuySignupUrl} target="_blank" rel="sponsored noopener">
+            Sign Up CSSBuy Now
+          </a>
+          <a class="button min-h-14 border border-ink bg-white px-6 text-base font-black text-ink" href="/finds/">
+            Browse Spreadsheet
+          </a>
+        </div>
+        <p class="mt-3 text-sm font-bold text-ink/55">
+          Tip: create your account first so your coupon eligibility is ready before you build a parcel.
+        </p>
+      </div>
+
+      <div class="rounded-lg border border-line bg-paper p-3">
+        <div class="rounded-md bg-white p-5 shadow-soft">
+          <div class="grid gap-3">
+            {steps.map((step, index) => (
+              <button class="group grid grid-cols-[52px_1fr] gap-3 rounded-md border border-line bg-white p-3 text-left transition hover:border-ink hover:bg-[#fff7ed]" type="button" data-scroll-target={`step-${index + 1}`}>
+                <span class="flex h-12 w-12 items-center justify-center rounded-md bg-ink text-sm font-black text-white">{index + 1}</span>
+                <span>
+                  <span class="block text-xs font-black uppercase text-clay">{step.number}</span>
+                  <span class="mt-1 block text-base font-black text-ink group-hover:text-[#9a3412]">{step.title}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell mt-8" aria-labelledby="steps-heading">
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-sm font-black uppercase text-clay">Step-by-step</p>
+        <h2 id="steps-heading" class="mt-2 text-2xl font-black tracking-normal text-ink md:text-4xl">
+          From First Click to Shipped Parcel
+        </h2>
+      </div>
+      <p class="max-w-xl text-sm font-bold leading-6 text-ink/58">
+        Each step keeps the shopper moving toward either registration, product selection, or shipment confidence.
+      </p>
+    </div>
+
+    <div class="grid gap-5">
+      {steps.map((step, index) => (
+        <article id={`step-${index + 1}`} class="scroll-mt-28 rounded-lg border border-line bg-white p-5 shadow-soft md:p-6">
+          <div class="grid gap-5 lg:grid-cols-[180px_1fr_220px] lg:items-center">
+            <div>
+              <p class="text-sm font-black uppercase text-ocean">{step.eyebrow}</p>
+              <div class="mt-3 flex items-center gap-3">
+                <span class="flex h-14 w-14 items-center justify-center rounded-md bg-ink text-xl font-black text-white">{index + 1}</span>
+                <p class="text-sm font-black uppercase text-ink/55">{step.number}</p>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-2xl font-black tracking-normal text-ink">{step.title}</h3>
+              <p class="mt-3 text-base leading-7 text-ink/70">{step.body}</p>
+            </div>
+            <div>
+              {index === 0 && (
+                <p class="mb-3 rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-black uppercase leading-5 text-[#9a3412]">
+                  New-user coupon funnel
+                </p>
+              )}
+              <!-- PUBLIC_CSSBUY_SIGNUP_URL can override the default CSSBuy invite link. -->
+              <a class={`button w-full text-center ${step.accent}`} href={step.actionUrl} target={step.actionUrl.startsWith("http") ? "_blank" : undefined} rel={step.actionUrl.startsWith("http") ? "sponsored noopener" : undefined}>
+                {step.actionLabel}
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="shell mt-10">
+    <div class="grid gap-5 rounded-lg border border-line bg-ink p-5 text-white md:grid-cols-[1fr_auto] md:items-center md:p-6">
+      <div>
+        <p class="text-sm font-black uppercase text-white/60">Ready to start?</p>
+        <h2 class="mt-2 text-2xl font-black tracking-normal md:text-3xl">Claim coupons before your first haul.</h2>
+        <p class="mt-2 max-w-2xl text-sm font-bold leading-6 text-white/72">
+          Register first, then come back to the spreadsheet and choose the items you want to paste into CSSBuy.
+        </p>
+      </div>
+      <!-- PUBLIC_CSSBUY_SIGNUP_URL can override the default CSSBuy invite link. -->
+      <a class="button min-h-14 bg-[#ff4b0b] px-6 text-base font-black text-white hover:bg-[#e83f00]" href={cssbuySignupUrl} target="_blank" rel="sponsored noopener">
+        Sign Up CSSBuy Now
+      </a>
+    </div>
+  </section>
+
+  <section class="shell mt-10" aria-labelledby="faq-heading">
+    <div class="grid gap-5 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+      <div>
+        <p class="text-sm font-black uppercase text-clay">FAQ</p>
+        <h2 id="faq-heading" class="mt-2 text-2xl font-black tracking-normal text-ink md:text-3xl">
+          CSSBuy Beginner Questions
+        </h2>
+        <p class="mt-3 text-sm font-bold leading-6 text-ink/58">
+          Quick answers for shoppers comparing coupons, QC photos, delivery time, and shipping cost before placing a first order.
+        </p>
+      </div>
+      <div class="grid gap-3">
+        {faqs.map((item) => (
+          <details class="group rounded-lg border border-line bg-white p-4 shadow-soft">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-black text-ink">
+              <span>{item.question}</span>
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line text-xl leading-none text-ink/70 transition group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="mt-3 text-sm font-bold leading-7 text-ink/65">{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

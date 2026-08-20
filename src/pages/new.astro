@@ -1,0 +1,249 @@
+---
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "New Arrivals & Recent Finds | CSSBuy Spreadsheet Updates";
+const description =
+  "Browse recent CSSBuy spreadsheet arrivals, just-added sneakers, restocked hoodies, rare accessories, QC-ready products, and limited W2C links.";
+const pageUpdated = "2026-08-19";
+
+const updates = [
+  {
+    time: "Just Added (2 Hours Ago)",
+    note: "Fresh spreadsheet drops with early buyer interest.",
+    items: [
+      {
+        badge: "NEW",
+        name: "Nike Air Jordan 4 Super Mario Black/Green Sneakers",
+        priceUsd: 49,
+        image: "/images/products/retro-runner-mesh-low-cssbuy-shoes.jpg",
+        imageAlt: "new Nike Air Jordan 4 Super Mario Black Green Sneakers from StreetStyle",
+        buyUrl: "https://streetstyle.maisonlooks.com/en/p/nike-air-jordan-4-super-mario-black-green-sneakers-61ae7a",
+      },
+      {
+        badge: "NEW",
+        name: "Stone Island 68-15 Grey Half-Zip Sweater",
+        priceUsd: 17,
+        image: "/images/products/grey-zip-pullover-hoodie-cssbuy.png",
+        imageAlt: "new Stone Island 68-15 Grey Half-Zip Sweater from StreetStyle",
+        buyUrl: "https://streetstyle.maisonlooks.com/en/p/stone-island-68-15-grey-half-zip-sweater-b0c932",
+      },
+    ],
+  },
+  {
+    time: "Recent Morning Drop",
+    note: "High-click finds added after QC photos started circulating.",
+    items: [
+      {
+        badge: "Restocked",
+        name: "Balenciaga Beige Hoodie with BALEN CIAGA Print",
+        priceUsd: 27,
+        image: "/images/products/heavyweight-zip-hoodie-cssbuy-find.jpg",
+        imageAlt: "restocked Balenciaga Beige Hoodie with BALEN CIAGA Print from StreetStyle",
+        buyUrl: "https://streetstyle.maisonlooks.com/en/p/balenciaga-beige-hoodie-with-balen-ciaga-print-9ff998",
+      },
+      {
+        badge: "NEW",
+        name: "Chanel Classic Flap Black Lambskin Wallet",
+        priceUsd: 22,
+        image: "/images/products/nylon-crossbody-pouch-cssbuy-accessory.jpg",
+        imageAlt: "new Chanel Classic Flap Black Lambskin Wallet from StreetStyle",
+        buyUrl: "https://streetstyle.maisonlooks.com/en/p/chanel-classic-flap-black-lambskin-wallet-08e7c5",
+      },
+    ],
+  },
+  {
+    time: "Previous Drop",
+    note: "Items that moved fast but still deserve a second look.",
+    items: [
+      {
+        badge: "Restocked",
+        name: "Nike Air Force 1 White/Brown Sneakers",
+        priceUsd: 21,
+        image: "/images/products/court-leather-low-cssbuy-shoes.jpg",
+        imageAlt: "restocked Nike Air Force 1 White Brown Sneakers from StreetStyle",
+        buyUrl: "https://streetstyle.maisonlooks.com/en/p/nike-air-force-1-white-brown-sneakers-bca374",
+      },
+      {
+        badge: "NEW",
+        name: "Amiri Black Leopard Print T-Shirt",
+        priceUsd: 12,
+        image: "/images/products/vintage-graphic-tee-cssbuy-tshirt.jpg",
+        imageAlt: "new Amiri Black Leopard Print T-Shirt from StreetStyle",
+        buyUrl: "https://streetstyle.maisonlooks.com/en/p/amiri-black-leopard-print-t-shirt-a4f10e",
+      },
+    ],
+  },
+];
+
+const allUpdateItems = updates.flatMap((group) => group.items);
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url: "https://cssfinds.com/new/",
+    dateModified: pageUpdated,
+    mainEntity: {
+      "@type": "ItemList",
+      name: "CSSBuy Spreadsheet recent arrivals",
+      numberOfItems: allUpdateItems.length,
+      itemListElement: allUpdateItems.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Product",
+          name: item.name,
+          image: `https://cssfinds.com${item.image}`,
+          description: `${item.name} newly added CSSBuy spreadsheet find with current W2C link.`,
+          offers: {
+            "@type": "Offer",
+            price: item.priceUsd,
+            priceCurrency: "USD",
+            availability: "https://schema.org/LimitedAvailability",
+            url: item.buyUrl,
+          },
+        },
+      })),
+    },
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "New Arrivals", url: "https://cssfinds.com/new/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} canonical="https://cssfinds.com/new/" schema={schema} lang="en">
+  <section class="border-b border-line bg-ink text-white">
+    <div class="shell py-8 md:py-12">
+      <div class="inline-flex animate-pulse items-center rounded-full border border-orange-300 bg-[#ff4b0b] px-4 py-2 text-sm font-black text-white shadow-[0_12px_28px_rgba(255,75,11,0.34)]">
+        Last reviewed: {pageUpdated}
+      </div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+        <div>
+          <p class="text-sm font-black uppercase text-white/55">Recent CSSBuy spreadsheet drops</p>
+          <h1 class="mt-3 max-w-4xl text-3xl font-black leading-tight tracking-normal md:text-5xl">
+            New Arrivals Before They Disappear
+          </h1>
+          <p class="mt-4 max-w-3xl text-base leading-7 text-white/72 md:text-lg">
+            The spreadsheet changes fast. Check recent finds, restocks, and limited batch links before the good sizes, popular colors, or best sellers get cleaned out.
+          </p>
+        </div>
+        <div class="grid grid-cols-3 gap-2 rounded-lg border border-white/12 bg-white/8 p-3 text-center">
+          <div class="rounded-md bg-white px-3 py-4 text-ink">
+            <p class="text-2xl font-black">{allUpdateItems.length}</p>
+            <p class="mt-1 text-xs font-bold text-ink/55">Fresh drops</p>
+          </div>
+          <div class="rounded-md bg-white px-3 py-4 text-ink">
+            <p class="text-2xl font-black">New</p>
+            <p class="mt-1 text-xs font-bold text-ink/55">Recent</p>
+          </div>
+          <div class="rounded-md bg-white px-3 py-4 text-ink">
+            <p class="text-2xl font-black text-[#ff4b0b]">HOT</p>
+            <p class="mt-1 text-xs font-bold text-ink/55">Restocks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell mt-8" aria-labelledby="timeline-heading">
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-sm font-black uppercase text-clay">Update timeline</p>
+        <h2 id="timeline-heading" class="mt-2 text-2xl font-black tracking-normal text-ink md:text-4xl">
+          Spreadsheet Finds Added Recently
+        </h2>
+      </div>
+      <a class="button border border-ink bg-white text-ink" href="/finds/">Browse Full Spreadsheet</a>
+    </div>
+
+    <div class="relative">
+      <div class="absolute bottom-0 left-4 top-0 hidden w-px bg-line md:block" aria-hidden="true"></div>
+      <div class="grid gap-7">
+        {
+          updates.map((group) => (
+            <section class="relative grid gap-4 md:grid-cols-[180px_1fr] md:gap-6">
+              <div class="md:sticky md:top-28 md:self-start">
+                <div class="flex items-center gap-3 md:block">
+                  <span class="hidden h-9 w-9 rounded-full border-4 border-white bg-[#ff4b0b] shadow-soft md:absolute md:left-0 md:top-0 md:block md:-translate-x-[2px]" aria-hidden="true"></span>
+                  <div class="rounded-lg border border-line bg-white p-4 shadow-soft md:ml-10">
+                    <p class="text-base font-black text-ink">{group.time}</p>
+                    <p class="mt-2 text-sm font-bold leading-6 text-ink/55">{group.note}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid gap-4 lg:grid-cols-2">
+                {group.items.map((item) => (
+                  <article class="overflow-hidden rounded-lg border border-line bg-white shadow-soft">
+                    <img class="aspect-[4/3] w-full bg-paper object-cover" src={item.image} alt={item.imageAlt} width="640" height="480" loading="lazy" />
+                    <div class="p-4">
+                      <div class="flex items-center justify-between gap-3">
+                        <span class={item.badge === "NEW" ? "tag border-orange-200 bg-orange-50 text-[#9a3412]" : "tag border-green-200 bg-green-50 text-moss"}>
+                          {item.badge}
+                        </span>
+                        <span class="text-xs font-black uppercase text-ink/45">Limited stock signal</span>
+                      </div>
+                      <h3 class="mt-3 text-xl font-black leading-7 text-ink">{item.name}</h3>
+                      <p class="mt-2 text-2xl font-black tabular-nums text-ink">${item.priceUsd}</p>
+                      <!-- Affiliate URL insertion point: replace item.buyUrl with your dynamic CSSBuy affiliate URL for this new arrival. -->
+                      <a class="button mt-4 min-h-14 w-full bg-[#ff4b0b] text-base font-black text-white shadow-[0_12px_28px_rgba(255,75,11,0.28)] hover:bg-[#e83f00]" href={item.buyUrl} target="_blank" rel="sponsored noopener">
+                        Cop Now
+                      </a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="shell mt-10">
+    <div class="rounded-lg border border-line bg-white p-5 shadow-soft md:p-6">
+      <div class="grid gap-5 lg:grid-cols-[1fr_420px] lg:items-center">
+        <div>
+          <p class="text-sm font-black uppercase text-ocean">Weekly drop alerts</p>
+          <h2 class="mt-2 text-2xl font-black tracking-normal text-ink md:text-3xl">Don't miss rare spreadsheet finds.</h2>
+          <p class="mt-3 max-w-2xl text-sm font-bold leading-6 text-ink/62">
+            Don't miss out on rare finds. Get weekly spreadsheet updates directly to your inbox.
+          </p>
+        </div>
+        <form class="grid gap-2 sm:grid-cols-[1fr_auto]" aria-label="Newsletter signup" data-newsletter-form>
+          <label class="sr-only" for="new-arrivals-email">Email address</label>
+          <input
+            id="new-arrivals-email"
+            class="control min-h-14 text-base font-bold placeholder:text-ink/42"
+            type="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+          <button class="button min-h-14 bg-ink px-6 text-base font-black text-white" type="submit">
+            Get Updates
+          </button>
+        </form>
+        <p class="text-sm font-bold text-ink/55 sm:col-start-1 lg:col-start-2" role="status" data-newsletter-status>
+          Weekly email capture is not connected yet. Bookmark this page for the latest published updates.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const newsletterForm = document.querySelector<HTMLFormElement>("[data-newsletter-form]");
+  const newsletterStatus = document.querySelector<HTMLElement>("[data-newsletter-status]");
+
+  newsletterForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (newsletterStatus) {
+      newsletterStatus.textContent = "Thanks. Email updates are not connected yet, so no address was stored.";
+    }
+  });
+</script>

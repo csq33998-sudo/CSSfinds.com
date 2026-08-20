@@ -9,7 +9,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cssfinds.com; connect-src 'self'; font-src 'self' data:; form-action https://streetstyle.maisonlooks.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://translate.google.com https://translate.googleapis.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://translate.googleapis.com https://translate.google.com; img-src 'self' data: https://cssfinds.com https://cdn.maisonlooks.com https://www.gstatic.com https://translate.google.com https://translate.googleapis.com; connect-src 'self' https://translate.googleapis.com https://translate.google.com; font-src 'self' data:; form-action https://streetstyle.maisonlooks.com; frame-src https://docs.google.com https://translate.google.com https://www.google.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests"
         },
         {
           "key": "X-Content-Type-Options",

@@ -1,0 +1,210 @@
+---
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "CSSBuy QC Photos Finder | Real Factory Pictures";
+const description =
+  "Find CSSBuy QC photos, real factory pictures, batch comparison albums, sneaker QC checks, hoodie QC photos, and W2C links before buying from a CSSBuy spreadsheet.";
+
+const qcPhotos = [
+  {
+    name: "Nike Air Jordan 4 Super Mario Black/Green Sneakers",
+    category: "Shoes",
+    image: "/images/products/white-brown-air-force-style-low-cssbuy.png",
+    height: "h-[360px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/nike-air-jordan-4-super-mario-black-green-sneakers-61ae7a",
+  },
+  {
+    name: "Nike Air Force 1 White/Brown Sneakers",
+    category: "Shoes",
+    image: "/images/products/white-star-leather-low-cssbuy.png",
+    height: "h-[280px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/nike-air-force-1-white-brown-sneakers-bca374",
+  },
+  {
+    name: "Balenciaga Beige Hoodie with BALEN CIAGA Print",
+    category: "Hoodies",
+    image: "/images/products/cream-logo-pullover-hoodie-cssbuy.png",
+    height: "h-[420px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/balenciaga-beige-hoodie-with-balen-ciaga-print-9ff998",
+  },
+  {
+    name: "Polo Ralph Lauren Big Pony Hoodie Navy Red",
+    category: "Hoodies",
+    image: "/images/products/grey-zip-pullover-hoodie-cssbuy.png",
+    height: "h-[330px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/polo-ralph-lauren-big-pony-hoodie-navy-red-4bf2e6",
+  },
+  {
+    name: "Chanel Classic Flap Black Lambskin Wallet",
+    category: "Accessories",
+    image: "/images/products/brown-pattern-crossbody-pouch-cssbuy.png",
+    height: "h-[300px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/chanel-classic-flap-black-lambskin-wallet-08e7c5",
+  },
+  {
+    name: "Amiri Black Leopard Print T-Shirt",
+    category: "T-Shirts",
+    image: "/images/products/off-white-arrow-graphic-tee-cssbuy.png",
+    height: "h-[380px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/amiri-black-leopard-print-t-shirt-a4f10e",
+  },
+  {
+    name: "Dior Dior Book Tote Lime Green Sneakers",
+    category: "Bags",
+    image: "/images/products/red-nylon-waist-bag-cssbuy.png",
+    height: "h-[260px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/dior-dior-book-tote-lime-green-sneakers-43dac4",
+  },
+  {
+    name: "Black Cargo Pants with Distressed Logo",
+    category: "Pants",
+    image: "/images/products/olive-cargo-jogger-pants-cssbuy.png",
+    height: "h-[410px]",
+    albumUrl: "/cssbuy-qc-photos/",
+    buyUrl: "https://streetstyle.maisonlooks.com/en/p/black-cargo-pants-with-distressed-logo-172786",
+  },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url: "https://cssfinds.com/qc/",
+    mainEntity: {
+      "@type": "ImageGallery",
+      name: "CSSBuy QC Photos Finder",
+      associatedMedia: qcPhotos.map((photo) => ({
+        "@type": "ImageObject",
+        name: photo.name,
+        contentUrl: `https://cssfinds.com${photo.image}`,
+        caption: `${photo.name} real factory QC picture for CSSBuy shoppers.`,
+      })),
+    },
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "CSSBuy QC Photos Finder", url: "https://cssfinds.com/qc/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} canonical="https://cssfinds.com/qc/" schema={schema} lang="en">
+  <section class="border-b border-line bg-white">
+    <div class="shell py-8 md:py-12">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="text-sm font-black uppercase text-ocean">Real factory picture search</p>
+        <h1 class="mt-3 text-3xl font-black leading-tight tracking-normal text-ink md:text-5xl">
+          CSSBuy QC Photos Finder
+        </h1>
+        <p class="mx-auto mt-4 max-w-3xl text-base leading-7 text-ink/70 md:text-lg">
+          Check batch photos before you buy. Search by item name, W2C link, sneaker batch, hoodie version, or spreadsheet find to preview real QC-style factory pictures.
+        </p>
+      </div>
+
+      <form class="mx-auto mt-7 max-w-4xl rounded-lg border border-line bg-paper p-3 shadow-soft" role="search" aria-label="QC Finder" data-qc-search>
+        <label class="sr-only" for="qc-finder">QC Finder</label>
+        <div class="grid gap-3 md:grid-cols-[1fr_auto]">
+          <input
+            id="qc-finder"
+            class="min-h-16 rounded-md border border-line bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/42 focus:border-ink md:text-lg"
+            type="search"
+            placeholder="Paste item link or name here to find real QC photos"
+            autocomplete="off"
+            data-qc-input
+          />
+          <button class="button min-h-16 bg-[#ff4b0b] px-8 text-base font-black text-white shadow-[0_14px_30px_rgba(255,75,11,0.28)] hover:bg-[#e83f00]" type="submit">
+            Find QC Photos
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="shell mt-8" aria-labelledby="qc-gallery-heading">
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-sm font-black uppercase text-clay">Factory picture gallery</p>
+        <h2 id="qc-gallery-heading" class="mt-2 text-2xl font-black tracking-normal text-ink md:text-4xl">
+          Trending CSSBuy QC Albums
+        </h2>
+      </div>
+      <a class="button border border-ink bg-white text-ink" href="/finds/">Back to Spreadsheet</a>
+    </div>
+
+    <div class="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
+      {
+        qcPhotos.map((photo) => (
+          <article
+            class="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg border border-line bg-white shadow-soft"
+            data-qc-photo
+            data-search={`${photo.name} ${photo.category}`.toLowerCase()}
+          >
+            <img
+              class={`${photo.height} w-full bg-paper object-cover transition duration-300 group-hover:scale-[1.03]`}
+              src={photo.image}
+              alt={`${photo.name} CSSBuy QC factory picture`}
+              width="640"
+              height="860"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/82 via-black/28 to-transparent p-4 opacity-100 transition duration-200 md:opacity-0 md:group-hover:opacity-100">
+              <div class="translate-y-0 transition duration-200 md:translate-y-3 md:group-hover:translate-y-0">
+                <p class="text-xs font-black uppercase text-white/68">{photo.category} QC</p>
+                <h3 class="mt-1 text-lg font-black leading-6 text-white">{photo.name}</h3>
+                <div class="mt-4 grid gap-2">
+                  <a class="button min-h-11 border border-white/45 bg-white/12 text-sm font-black text-white hover:border-white" href={photo.albumUrl}>
+                    View Full Album
+                  </a>
+                  <!-- Affiliate URL insertion point: replace photo.buyUrl with your CSSBuy affiliate W2C link for this batch. -->
+                  <a class="button min-h-12 bg-[#ff4b0b] text-sm font-black text-white shadow-[0_10px_24px_rgba(255,75,11,0.32)] hover:bg-[#e83f00]" href={photo.buyUrl} target="_blank" rel="sponsored noopener">
+                    Buy This Batch
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+    <div class="mt-6 hidden rounded-lg border border-line bg-white p-6 text-center shadow-soft" data-qc-empty>
+      <p class="text-lg font-black text-ink">No QC albums match this search.</p>
+      <p class="mt-2 text-sm font-bold text-ink/55">Try a product name, category, or clear the search box.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const qcForm = document.querySelector<HTMLFormElement>("[data-qc-search]");
+  const qcInput = document.querySelector<HTMLInputElement>("[data-qc-input]");
+  const qcPhotos = Array.from(document.querySelectorAll<HTMLElement>("[data-qc-photo]"));
+  const qcEmpty = document.querySelector<HTMLElement>("[data-qc-empty]");
+
+  const updateQcResults = () => {
+    const query = qcInput?.value.trim().toLowerCase() ?? "";
+    let visibleCount = 0;
+
+    qcPhotos.forEach((photo) => {
+      const isVisible = !query || (photo.dataset.search ?? "").includes(query);
+      photo.classList.toggle("hidden", !isVisible);
+      if (isVisible) visibleCount += 1;
+    });
+
+    qcEmpty?.classList.toggle("hidden", visibleCount !== 0);
+  };
+
+  qcForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    updateQcResults();
+  });
+  qcInput?.addEventListener("input", updateQcResults);
+</script>

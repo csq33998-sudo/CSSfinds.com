@@ -2,20 +2,24 @@
 import CssbuyInfoSection from "@/components/CssbuyInfoSection.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import ProductExplorer from "@/components/ProductExplorer.astro";
-import { copy } from "@/data/i18n";
-import { categories, getBreadcrumbSchema, getItemListSchema, products, promotionUrl } from "@/data/products";
+import { categories, getBreadcrumbSchema, getItemListSchema, products, promotionUrl, streetStyleSearchUrl } from "@/data/products";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 const lang = "en";
-const t = copy[lang].home;
 const popularQueries = [
   "CSSBuy shoes spreadsheet",
   "CSSBuy hoodie finds",
   "CSSBuy T-shirts spreadsheet",
   "CSSBuy bags spreadsheet",
 ];
-const title = t.title;
-const description = t.description;
+const title = "Curated CSSBuy Spreadsheet 2026 | Preview Finds & QC";
+const description =
+  "Browse a curated CSSBuy spreadsheet preview with QC-ready finds, sneakers, streetwear, prices, product photos, and direct shopping links.";
+const sheetEmbedUrl = import.meta.env.PUBLIC_GOOGLE_SHEET_EMBED_URL ?? "";
+const sheetViewUrl = import.meta.env.PUBLIC_GOOGLE_SHEET_VIEW_URL ?? "/cssbuy-spreadsheet/";
+const previewRows = [...products]
+  .sort((a, b) => b.updated.localeCompare(a.updated))
+  .slice(0, 8);
 const schema = [
   {
     "@context": "https://schema.org",
@@ -38,30 +42,132 @@ const schema = [
     class="relative overflow-hidden bg-ink bg-cover bg-center text-white"
     style="background-image: linear-gradient(90deg, rgba(17, 24, 39, 0.86) 0%, rgba(17, 24, 39, 0.64) 42%, rgba(17, 24, 39, 0.18) 100%), url('/images/hero/cssbuy-shipping-hero.png');"
   >
-    <div class="shell py-14 md:py-20 lg:py-24">
+    <div class="shell py-12 md:py-16 lg:py-20">
       <div class="flex flex-wrap gap-2">
-        <span class="tag border-ink bg-ink text-white">{t.badgeUpdated}</span>
-        <span class="tag border-white/35 bg-white/92 text-ink">{t.badgeSpreadsheet}</span>
-        <span class="tag border-white/35 bg-white/92 text-ink">{t.badgeQc}</span>
+        <span class="tag border-ink bg-ink text-white">Curated preview</span>
+        <span class="tag border-white/35 bg-white/92 text-ink">CSSBuy spreadsheet</span>
+        <span class="tag border-white/35 bg-white/92 text-ink">QC photo links</span>
       </div>
       <h1 class="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-normal drop-shadow-sm md:text-5xl">
-        {t.h1}
+        Curated CSSBuy Spreadsheet 2026
       </h1>
       <p class="mt-5 max-w-3xl text-base leading-7 text-white/86 md:text-lg">
-        {t.intro}
+        Browse a spreadsheet-first index of sneakers, hoodies, T-shirts, bags, accessories, and pants with prices, QC status, update dates, product photos, and direct shopping links.
       </p>
       <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-white/78" aria-label="Popular CSSBuy spreadsheet searches">
         <span class="text-white">Popular searches:</span>
         {popularQueries.map((query) => <span class="rounded-full border border-white bg-white px-3 py-1 text-ink shadow-sm">{query}</span>)}
       </div>
       <div class="mt-6 flex flex-wrap gap-3">
-        <a class="button bg-white text-ink" href="#latest-products-heading">{t.browse}</a>
-        <a class="button border border-white/40 bg-white/12 text-white hover:border-white" href={promotionUrl} rel="sponsored noopener" target="_blank">{t.visit}</a>
+        <a class="button bg-white text-ink" href="/cssbuy-spreadsheet/">Open spreadsheet</a>
+        <a class="button border border-white/40 bg-white/12 text-white hover:border-white" href={promotionUrl} rel="sponsored noopener" target="_blank">Visit StreetStyle</a>
+      </div>
+      <form
+        class="mt-5 flex w-full max-w-4xl overflow-hidden rounded-lg border border-white/35 bg-white shadow-2xl shadow-ink/25"
+        action={streetStyleSearchUrl}
+        method="get"
+        target="_blank"
+        rel="noopener"
+        role="search"
+        aria-label="Search StreetStyle finds"
+        data-streetstyle-search
+      >
+        <label class="sr-only" for="hero-streetstyle-search">Search CSSBuy finds</label>
+        <input
+          id="hero-streetstyle-search"
+          class="min-h-14 min-w-0 flex-1 border-0 bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-0"
+          type="search"
+          name="q"
+          placeholder="Search CSSBuy finds..."
+          autocomplete="off"
+          data-streetstyle-search-input
+        />
+        <button class="min-h-14 shrink-0 bg-[#ff4b0b] px-6 text-base font-black text-white transition hover:bg-[#e83f00] md:px-8" type="submit">
+          Search
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <section id="cssbuy-spreadsheet" class="shell mt-8" aria-labelledby="spreadsheet-heading">
+    <div class="grid gap-5 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+      <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
+        <p class="text-sm font-black uppercase text-clay">Live spreadsheet access</p>
+        <h2 id="spreadsheet-heading" class="mt-2 text-2xl font-black tracking-normal text-ink md:text-3xl">
+          CSSBuy Spreadsheet 2026 Preview
+        </h2>
+        <p class="mt-3 text-sm leading-6 text-ink/65">
+          Use this landing page as the public entry point for CSSBuy product research. The embedded sheet can be swapped with your Google Sheets publish URL through <code>PUBLIC_GOOGLE_SHEET_EMBED_URL</code>, while the preview links below stay pointed at StreetStyle.
+        </p>
+        <div class="mt-5 grid grid-cols-3 gap-2 text-center">
+          <div class="rounded-md border border-line bg-paper px-3 py-4">
+            <p class="text-2xl font-black text-ink">{products.length}</p>
+            <p class="mt-1 text-xs font-bold text-ink/55">Preview finds</p>
+          </div>
+          <div class="rounded-md border border-line bg-paper px-3 py-4">
+            <p class="text-2xl font-black text-ink">{products.filter((product) => product.qc).length}</p>
+            <p class="mt-1 text-xs font-bold text-ink/55">QC ready</p>
+          </div>
+          <div class="rounded-md border border-line bg-paper px-3 py-4">
+            <p class="text-2xl font-black text-ink">{categories.length}</p>
+            <p class="mt-1 text-xs font-bold text-ink/55">Categories</p>
+          </div>
+        </div>
+        <a class="button mt-5 w-full bg-[#ff4b0b] text-white hover:bg-[#e83f00]" href={sheetViewUrl} target={sheetViewUrl.startsWith("http") ? "_blank" : undefined} rel={sheetViewUrl.startsWith("http") ? "noopener" : undefined}>
+          View full spreadsheet
+        </a>
+      </div>
+
+      <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+        {
+          sheetEmbedUrl ? (
+            <iframe
+              title="CSSBuy Spreadsheet 2026 embedded Google Sheet"
+              src={sheetEmbedUrl}
+              class="h-[720px] w-full"
+              loading="lazy"
+            />
+          ) : (
+            <div class="overflow-x-auto">
+              <table class="w-full table-fixed border-collapse text-left text-[11px] sm:text-xs">
+                <thead class="bg-ink text-white">
+                  <tr>
+                    <th class="w-[15%] px-2 py-3 font-black">Category</th>
+                    <th class="w-[29%] px-2 py-3 font-black">Item Name</th>
+                    <th class="w-[10%] px-2 py-3 font-black">Price</th>
+                    <th class="w-[16%] px-2 py-3 font-black">QC Photos</th>
+                    <th class="w-[14%] px-2 py-3 font-black">Cop Link</th>
+                    <th class="w-[16%] px-2 py-3 font-black">Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    previewRows.map((product) => {
+                      const category = categories.find((item) => item.slug === product.category)?.label ?? product.category;
+                      return (
+                        <tr class="border-b border-line last:border-b-0">
+                          <td class="break-words px-2 py-3 font-bold text-ink/70">{category}</td>
+                          <td class="break-words px-2 py-3 font-black text-ink">{product.name}</td>
+                          <td class="px-2 py-3 font-bold text-ink">${product.price}</td>
+                          <td class="break-words px-2 py-3 font-bold">{product.qc ? "Available" : "Pending"}</td>
+                          <td class="px-2 py-3">
+                            <a class="font-black text-ocean hover:text-ink" href={product.destinationUrl} target="_blank" rel="sponsored noopener">Open</a>
+                          </td>
+                          <td class="px-2 py-3 font-bold text-ink">{product.rating.toFixed(1)}/5</td>
+                        </tr>
+                      );
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+          )
+        }
       </div>
     </div>
   </section>
 
-  <ProductExplorer products={products} lang={lang} />
+  <ProductExplorer products={products} lang={lang} showSearch={false} />
   <section class="shell mt-12">
     <div class="grid gap-4 rounded-lg border border-line bg-white p-5 md:grid-cols-[1.2fr_2fr] md:items-center">
       <div>

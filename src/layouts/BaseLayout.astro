@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { copy, languages, localizePath, type Lang } from "@/data/i18n";
+import { copy, languageMenuOptions, languages, localizePath, type Lang } from "@/data/i18n";
 
 type Props = {
   title: string;
@@ -17,6 +17,7 @@ const { title, description, canonical = defaultCanonical, schema, image = "/imag
 const siteName = "CSSFinds";
 const t = copy[lang];
 const currentPath = Astro.url.pathname;
+const currentLanguage = languageMenuOptions.find((language) => language.code === lang) ?? languageMenuOptions[0];
 const absoluteUrl = (path: string) => new URL(path, siteUrl).href;
 const socialImage = absoluteUrl(image);
 ---
@@ -28,7 +29,8 @@ const socialImage = absoluteUrl(image);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/cssbuy-spreadsheet-favicon.svg?v=16" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/cssbuy-spreadsheet-favicon-custom.png" />
     <link rel="canonical" href={canonical} />
     {
       languages.map((language) => (
@@ -44,42 +46,74 @@ const socialImage = absoluteUrl(image);
     <meta property="og:image" content={socialImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="CSSFinds CSSBuy spreadsheet product finds preview" />
+    <meta property="og:image:alt" content="cssbuy spreadsheet" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={socialImage} />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
-    <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:font-bold" href="#main">
+    <button class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:font-bold" type="button" data-scroll-target="main">
       {t.skip}
-    </a>
+    </button>
     <header class="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur">
       <nav class="shell flex min-h-16 flex-wrap items-center justify-between gap-3 py-3" aria-label="Primary navigation">
         <a href={localizePath("/", lang)} class="flex items-center gap-3 font-black tracking-normal">
-          <img src="/cssfinds-logo.svg" alt="CSSBuy spreadsheet Finds CSSFinds logo" class="h-11 w-11" width="220" height="220" />
+          <img src="/cssbuy-spreadsheet-logo.png" alt="cssbuy spreadsheet" class="h-11 w-auto" width="242" height="60" />
           <span>CSSFinds</span>
         </a>
         <div class="flex flex-wrap items-center justify-end gap-2 text-sm font-bold">
           <div class="hidden items-center gap-2 md:flex">
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/", lang)}>{t.nav.home}</a>
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/finds/">Finds</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/how-to-buy/">How to Buy</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/qc/">QC</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/new/">New</a>
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/faq/", lang)}>{t.nav.faq}</a>
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/blog/", lang)}>{t.nav.blog}</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet-guide/", lang)}>{t.nav.guide}</a>
           </div>
-          <label class="sr-only" for="language-select">{t.nav.language}</label>
-          <select id="language-select" class="control min-w-36 py-2 text-sm font-bold" aria-label={t.nav.language} data-language-select>
-            {
-              languages.map((language) => (
-                <option value={localizePath(currentPath, language.code)} selected={language.code === lang}>
-                  {language.label}
-                </option>
-              ))
-            }
-          </select>
+          <div class="relative" data-language-menu>
+            <button
+              class="control flex min-w-36 items-center justify-between gap-3 py-2 text-sm font-bold"
+              type="button"
+              aria-label={t.nav.language}
+              aria-haspopup="true"
+              aria-expanded="false"
+              data-language-toggle
+            >
+              <span>{t.nav.language}</span>
+              <span class="text-xs leading-none text-clay" aria-hidden="true" data-language-caret>▾</span>
+            </button>
+            <div
+              class="absolute right-0 top-[calc(100%+8px)] z-50 hidden max-h-[72vh] w-[min(520px,calc(100vw-32px))] overflow-y-auto rounded-lg border border-line bg-white p-2 text-sm font-bold text-ink shadow-xl"
+              role="menu"
+              aria-label={t.nav.language}
+              data-language-options
+            >
+              <div class="grid gap-1 sm:grid-cols-2">
+              {
+                languageMenuOptions.map((language) => {
+                  const isCurrent = language.code === currentLanguage.code;
+                  return (
+                  <button
+                    class={isCurrent ? "block w-full bg-[#f3ffd8] px-4 py-3 text-left text-ink" : "block w-full px-4 py-3 text-left text-ink/75 hover:bg-paper hover:text-ink"}
+                    type="button"
+                    role="menuitem"
+                    lang={language.code}
+                    data-translate-language={language.translateCode}
+                  >
+                    {language.label}
+                  </button>
+                  );
+                })
+              }
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
     </header>
+    <div id="google_translate_element" class="sr-only" aria-hidden="true"></div>
     <main id="main">
       <slot />
     </main>
@@ -93,8 +127,11 @@ const socialImage = absoluteUrl(image);
         </div>
         <div class="flex flex-wrap gap-2 text-sm font-bold text-ink/70">
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/finds/">Finds</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/how-to-buy/">How to Buy</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/qc/">QC</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/new/">New</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/blog/", lang)}>{t.nav.blog}</a>
-          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-qc-photos/", lang)}>{t.footerQc}</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/robots.txt">{t.footerRobots}</a>
         </div>
       </div>
@@ -102,11 +139,109 @@ const socialImage = absoluteUrl(image);
   </body>
 </html>
 
+<script is:inline>
+  window.googleTranslateElementInit = function () {
+    new window.google.translate.TranslateElement(
+      {
+        pageLanguage: "en",
+        autoDisplay: false,
+        includedLanguages: "en,de,es,fr,it,pl,pt,ro,sv,nl,da,fi,el,cs,hu,bg,sk,hr,sl,lt,lv,et,ga,mt,zh-CN,ja,ko",
+      },
+      "google_translate_element",
+    );
+  };
+</script>
+
+<script is:inline async defer src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 <script>
-  document.querySelectorAll("[data-language-select]").forEach((select) => {
-    select.addEventListener("change", (event) => {
-      const target = event.currentTarget as HTMLSelectElement;
-      window.location.href = target.value;
+  document.querySelectorAll("[data-scroll-target]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const targetId = control.getAttribute("data-scroll-target");
+      const target = targetId ? document.getElementById(targetId) : null;
+
+      if (target) {
+        target.setAttribute("tabindex", "-1");
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        target.focus({ preventScroll: true });
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-language-menu]").forEach((menu) => {
+    const button = menu.querySelector("[data-language-toggle]");
+    const options = menu.querySelector("[data-language-options]");
+    const caret = menu.querySelector("[data-language-caret]");
+
+    if (!(button instanceof HTMLButtonElement) || !(options instanceof HTMLElement) || !(caret instanceof HTMLElement)) {
+      return;
+    }
+
+    const closeMenu = () => {
+      options.classList.add("hidden");
+      button.setAttribute("aria-expanded", "false");
+      caret.textContent = "▾";
+    };
+
+    const openMenu = () => {
+      options.classList.remove("hidden");
+      button.setAttribute("aria-expanded", "true");
+      caret.textContent = "▴";
+    };
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = button.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    options.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+
+    options.querySelectorAll("[data-translate-language]").forEach((item) => {
+      item.addEventListener("click", () => {
+        const language = item.getAttribute("data-translate-language");
+        let attempts = 0;
+
+        const translatePage = () => {
+          const select = document.querySelector(".goog-te-combo");
+
+          if (language && select instanceof HTMLSelectElement) {
+            select.value = language;
+            select.dispatchEvent(new Event("change"));
+            return;
+          }
+
+          attempts += 1;
+          if (attempts < 20) {
+            window.setTimeout(translatePage, 150);
+          }
+        };
+
+        if (language) {
+          translatePage();
+        }
+
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target as Node)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+        button.focus();
+      }
     });
   });
 </script>

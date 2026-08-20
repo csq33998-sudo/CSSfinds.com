@@ -373,7 +373,7 @@ const pageSchema = renderGuide
               {popularSearches.queries.map((query) => <span class="rounded-full border border-white bg-white px-3 py-1 text-ink shadow-sm">{query}</span>)}
             </div>
             <div class="mt-6 flex flex-wrap gap-3">
-              <a class="button bg-white text-ink" href="#latest-products-heading">{t.browse}</a>
+              <a class="button bg-white text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.browse}</a>
               <a class="button border border-white/40 bg-white/12 text-white hover:border-white" href={promotionUrl} rel="sponsored noopener" target="_blank">{t.visit}</a>
             </div>
           </div>

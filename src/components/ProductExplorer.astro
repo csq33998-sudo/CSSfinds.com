@@ -1,15 +1,16 @@
 ---
 import { copy, type Lang } from "@/data/i18n";
-import { getCategoryLabel, getProductImageAlt, getProductName, type Product } from "@/data/products";
+import { getCategoryLabel, getProductImageAlt, getProductName, streetStyleSearchUrl, type Product } from "@/data/products";
 
 type Props = {
   products: Product[];
   heading?: string;
   intro?: string;
   lang?: Lang;
+  showSearch?: boolean;
 };
 
-const { products, lang = "en" } = Astro.props;
+const { products, lang = "en", showSearch = true } = Astro.props;
 const t = copy[lang].explorer;
 const heading = Astro.props.heading ?? t.heading;
 const intro = Astro.props.intro ?? t.intro;
@@ -32,30 +33,34 @@ const getViews = (product: Product) => {
 ---
 
 <section id={explorerId} class="shell mt-4" aria-labelledby="latest-products-heading" data-product-explorer>
-  <form
-    class="mb-8 flex w-full overflow-hidden rounded-lg border border-line bg-white shadow-sm"
-    action="https://streetstyle.maisonlooks.com/en/search"
-    method="get"
-    target="_blank"
-    rel="noopener"
-    role="search"
-    aria-label="Search StreetStyle finds"
-    data-streetstyle-search
-  >
-    <label class="sr-only" for={`${explorerId}-search`}>{t.search}</label>
-    <input
-      id={`${explorerId}-search`}
-      class="min-h-14 min-w-0 flex-1 border-0 bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-0"
-      type="search"
-      name="q"
-      placeholder={streetStyleSearch.placeholder}
-      autocomplete="off"
-      data-streetstyle-search-input
-    />
-    <button class="min-h-14 shrink-0 bg-[#ff4b0b] px-6 text-base font-black text-white transition hover:bg-[#e83f00] md:px-8" type="submit">
-      {streetStyleSearch.button}
-    </button>
-  </form>
+  {
+    showSearch && (
+      <form
+        class="mb-8 flex w-full overflow-hidden rounded-lg border border-line bg-white shadow-sm"
+        action={streetStyleSearchUrl}
+        method="get"
+        target="_blank"
+        rel="noopener"
+        role="search"
+        aria-label="Search StreetStyle finds"
+        data-streetstyle-search
+      >
+        <label class="sr-only" for={`${explorerId}-search`}>{t.search}</label>
+        <input
+          id={`${explorerId}-search`}
+          class="min-h-14 min-w-0 flex-1 border-0 bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-0"
+          type="search"
+          name="q"
+          placeholder={streetStyleSearch.placeholder}
+          autocomplete="off"
+          data-streetstyle-search-input
+        />
+        <button class="min-h-14 shrink-0 bg-[#ff4b0b] px-6 text-base font-black text-white transition hover:bg-[#e83f00] md:px-8" type="submit">
+          {streetStyleSearch.button}
+        </button>
+      </form>
+    )
+  }
 
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>

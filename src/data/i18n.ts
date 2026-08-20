@@ -8,6 +8,36 @@ export const languages = [
   { code: "pt", label: "Português", short: "PT" },
 ] as const;
 
+export const languageMenuOptions = [
+  { code: "en", label: "English", translateCode: "en" },
+  { code: "de", label: "Deutsch", translateCode: "de" },
+  { code: "es", label: "Espanol", translateCode: "es" },
+  { code: "fr", label: "Francais", translateCode: "fr" },
+  { code: "it", label: "Italiano", translateCode: "it" },
+  { code: "pl", label: "Polski", translateCode: "pl" },
+  { code: "pt", label: "Portugues", translateCode: "pt" },
+  { code: "ro", label: "Romana", translateCode: "ro" },
+  { code: "sv", label: "Svenska", translateCode: "sv" },
+  { code: "nl", label: "Nederlands", translateCode: "nl" },
+  { code: "da", label: "Dansk", translateCode: "da" },
+  { code: "fi", label: "Suomi", translateCode: "fi" },
+  { code: "el", label: "Greek", translateCode: "el" },
+  { code: "cs", label: "Cestina", translateCode: "cs" },
+  { code: "hu", label: "Magyar", translateCode: "hu" },
+  { code: "bg", label: "Bulgarian", translateCode: "bg" },
+  { code: "sk", label: "Slovencina", translateCode: "sk" },
+  { code: "hr", label: "Hrvatski", translateCode: "hr" },
+  { code: "sl", label: "Slovenscina", translateCode: "sl" },
+  { code: "lt", label: "Lietuviu", translateCode: "lt" },
+  { code: "lv", label: "Latviesu", translateCode: "lv" },
+  { code: "et", label: "Eesti", translateCode: "et" },
+  { code: "ga", label: "Gaeilge", translateCode: "ga" },
+  { code: "mt", label: "Malti", translateCode: "mt" },
+  { code: "zh-cn", label: "Chinese Simplified", translateCode: "zh-CN" },
+  { code: "ja", label: "Japanese", translateCode: "ja" },
+  { code: "ko", label: "Korean", translateCode: "ko" },
+] as const;
+
 export type Lang = (typeof languages)[number]["code"];
 
 export const defaultLang: Lang = "en";
