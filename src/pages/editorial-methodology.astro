@@ -1,0 +1,58 @@
+---
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "Editorial Methodology | CSSFinds";
+const description = "How CSSFinds selects products, verifies source pages, records CNY prices, checks QC evidence, writes risk notes, and corrects errors.";
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: "https://cssfinds.com/editorial-methodology/",
+    dateModified: "2026-09-02",
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "Editorial Methodology", url: "https://cssfinds.com/editorial-methodology/" },
+  ]),
+];
+
+const steps = [
+  ["1. Source-page check", "An editor opens the public StreetStyle product page and excludes links that fail to resolve."],
+  ["2. Price recording", "We record the price displayed on that page in its source currency, CNY. We do not present a converted amount as a live quote."],
+  ["3. QC evidence check", "We confirm a visible QC Reviews area, record the number of buyer photo sets shown at review time, and retain one source thumbnail for each set in the noindex QC viewer. The matching StreetStyle product page remains linked for the complete album."],
+  ["4. Editorial selection", "We retain items with usable visual evidence and write a product-specific reason for inclusion. The reason is not a recommendation to purchase."],
+  ["5. Risk disclosure", "Each entry receives a category-specific checklist and states that visual QC is not authentication or a delivery guarantee."],
+  ["6. Publication and correction", "The entry shows the verification timestamp, editor, and method. Broken links or material errors can be reported through the corrections section on the About page."],
+];
+---
+
+<BaseLayout title={title} description={description} canonical="https://cssfinds.com/editorial-methodology/" schema={schema} lang="en">
+  <section class="border-b border-line bg-white">
+    <div class="shell py-10 md:py-14">
+      <p class="text-sm font-black uppercase text-ocean">Editorial standards</p>
+      <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight text-ink md:text-5xl">How CSSFinds verifies a product entry</h1>
+      <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/70">Last updated September 2, 2026. The current 42-item selection was checked manually against public StreetStyle pages.</p>
+    </div>
+  </section>
+  <section class="shell mt-8 grid gap-5 md:grid-cols-2">
+    {steps.map(([heading, body]) => (
+      <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+        <h2 class="text-xl font-black text-ink">{heading}</h2>
+        <p class="mt-3 text-sm font-bold leading-6 text-ink/65">{body}</p>
+      </article>
+    ))}
+  </section>
+  <section class="shell mt-8 grid gap-5 md:grid-cols-2">
+    <article class="rounded-lg border border-line bg-paper p-6">
+      <h2 class="text-2xl font-black text-ink">Reasons for exclusion</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">We exclude pages that do not resolve, lack visible buyer QC sets, omit a usable displayed price, duplicate another entry without adding evidence, or cannot be described without unsupported claims.</p>
+    </article>
+    <article class="rounded-lg border border-line bg-paper p-6">
+      <h2 class="text-2xl font-black text-ink">Known limits</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">Prices and source pages can change after review. QC sets may represent other buyers or batches. CSSFinds does not test products, inspect warehouses, authenticate goods, or verify shipping and return terms.</p>
+    </article>
+  </section>
+</BaseLayout>

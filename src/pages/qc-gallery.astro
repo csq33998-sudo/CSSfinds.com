@@ -1,0 +1,122 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCategoryLabel, getProductImageAlt, getProductName, products } from "@/data/products";
+
+const formatVerificationTime = (value: string) =>
+  new Intl.DateTimeFormat("en", { dateStyle: "long", timeStyle: "short" }).format(new Date(value));
+---
+
+<BaseLayout
+  title="Product QC Evidence Viewer | CSSFinds"
+  description="View the StreetStyle buyer QC thumbnails verified for a selected CSSFinds product."
+  noindex={true}
+>
+  <section class="shell py-10 md:py-14" aria-labelledby="qc-viewer-heading">
+    <a class="text-sm font-black text-ocean hover:underline" href="/">← Back to product catalog</a>
+    <div class="mt-5 max-w-3xl">
+      <p class="text-sm font-black uppercase tracking-[0.18em] text-clay">Source evidence viewer</p>
+      <h1 id="qc-viewer-heading" class="mt-2 text-4xl font-black tracking-tight md:text-5xl">Product QC evidence</h1>
+      <p class="mt-4 text-base font-bold leading-7 text-ink/65">
+        These are the current QC-set thumbnails observed on the matching StreetStyle product page. Open a thumbnail to inspect the source image, or open StreetStyle for the complete on-page album.
+      </p>
+    </div>
+
+    <form class="mt-8 max-w-3xl rounded-lg border border-line bg-white p-4 shadow-sm" data-qc-picker>
+      <label class="block text-sm font-black text-ink" for="qc-product-picker">Choose a product</label>
+      <select id="qc-product-picker" class="mt-2 min-h-12 w-full rounded-md border border-line bg-white px-3 text-base font-bold text-ink focus:border-ocean focus:ring-2 focus:ring-ocean/20" data-qc-product-picker>
+        <option value="">Select a product</option>
+        {products.map((product) => <option value={product.id}>{getProductName(product)} — {product.qcPhotoSets} QC {product.qcPhotoSets === 1 ? "set" : "sets"}</option>)}
+      </select>
+    </form>
+
+    <div class="mt-8 hidden rounded-lg border border-line bg-white p-6 shadow-sm" data-qc-empty>
+      <h2 class="text-2xl font-black">Choose a valid product</h2>
+      <p class="mt-2 font-bold leading-7 text-ink/65">Use a product card’s “View QC evidence” button or select a product above.</p>
+    </div>
+
+    {
+      products.map((product) => (
+        <article class="mt-8" data-qc-product data-product-id={product.id} hidden>
+          <div class="grid gap-6 rounded-lg border border-line bg-white p-5 shadow-sm md:grid-cols-[180px_1fr] md:p-6">
+            <img
+              class="aspect-[4/3] w-full rounded-md bg-paper object-cover"
+              src={product.image}
+              alt={getProductImageAlt(product)}
+              width="640"
+              height="480"
+            />
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="tag">{getCategoryLabel(product.category)}</span>
+                <span class="tag text-ink/60">{product.qcPhotoSets} verified QC {product.qcPhotoSets === 1 ? "set" : "sets"}</span>
+              </div>
+              <h2 class="mt-3 text-2xl font-black leading-tight md:text-3xl">{getProductName(product)}</h2>
+              <p class="mt-2 text-sm font-bold text-ink/55">{product.brand}</p>
+              <p class="mt-4 text-sm font-bold leading-6 text-ink/65">
+                QC source checked {formatVerificationTime(product.qcVerifiedAt)}. StreetStyle presents the complete sets in an on-page lightbox and does not expose a separate stable QC page URL.
+              </p>
+              <a class="button mt-5 inline-flex border border-ink bg-ink text-white" href={product.sourceUrl} rel="sponsored noopener" target="_blank">
+                Open complete QC album on StreetStyle
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {product.qcImageUrls.map((thumbnailUrl, index) => (
+              <figure class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+                <a href={thumbnailUrl} rel="noopener noreferrer" target="_blank" aria-label={`Open QC set ${index + 1} source image for ${getProductName(product)}`}>
+                  <img
+                    class="aspect-[4/3] w-full bg-paper object-cover transition hover:scale-[1.02]"
+                    src={thumbnailUrl}
+                    alt={`${getProductName(product)} QC set ${index + 1} thumbnail from StreetStyle`}
+                    loading="lazy"
+                    width="416"
+                    height="312"
+                  />
+                </a>
+                <figcaption class="border-t border-line px-4 py-3 text-sm font-black text-ink">QC set {index + 1}</figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <aside class="mt-6 rounded-lg border border-amber-300 bg-amber-50 p-5 text-sm font-bold leading-6 text-ink/70">
+            QC images are third-party visual evidence. They do not prove authenticity, guarantee that the delivered item matches a prior order, or replace measurements for the exact size being purchased.
+          </aside>
+        </article>
+      ))
+    }
+
+    <noscript>
+      <p class="mt-8 rounded-lg border border-line bg-white p-5 font-bold">JavaScript is required to select and display a product’s QC evidence.</p>
+    </noscript>
+  </section>
+</BaseLayout>
+
+<script>
+  const picker = document.querySelector<HTMLSelectElement>("[data-qc-product-picker]");
+  const empty = document.querySelector<HTMLElement>("[data-qc-empty]");
+  const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-qc-product]"));
+
+  const showProduct = (productId: string | null) => {
+    let found = false;
+
+    sections.forEach((section) => {
+      const matches = Boolean(productId) && section.dataset.productId === productId;
+      section.hidden = !matches;
+      if (matches) found = true;
+    });
+
+    if (picker) picker.value = found && productId ? productId : "";
+    empty?.classList.toggle("hidden", found);
+  };
+
+  const productId = new URLSearchParams(window.location.search).get("product");
+  showProduct(productId);
+
+  picker?.addEventListener("change", () => {
+    const nextProductId = picker.value;
+    const nextUrl = nextProductId ? `/qc-gallery/?product=${encodeURIComponent(nextProductId)}` : "/qc-gallery/";
+    window.history.replaceState({}, "", nextUrl);
+    showProduct(nextProductId || null);
+  });
+</script>

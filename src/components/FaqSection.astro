@@ -16,17 +16,17 @@ const faqCopy = {
       {
         question: "What is a CSSBuy spreadsheet for finds?",
         answer:
-          "A CSSBuy spreadsheet is a curated sheet of CSSBuy finds that helps shoppers compare products by category, price, QC photo status, image, and update date before opening a product or shopping link.",
+          "CSSFinds uses a filterable editorial catalog rather than a large unchecked spreadsheet. It helps readers compare 42 reviewed product pages by category, CNY price, QC evidence, source, and verification time.",
       },
       {
         question: "How do I use CSSFinds to browse CSSBuy finds?",
         answer:
-          "Use CSSFinds as a searchable CSSBuy spreadsheet: scan the latest finds, filter by item type or price, check whether QC photos are available, then open the strongest listing to review the product details.",
+          "Filter by name, category, brand, or CNY price; then review the direct source, visible buyer QC sets, selection reason, and risk notes. Recheck the destination page before making a decision.",
       },
       {
         question: "Why are QC photos useful for CSSBuy products?",
         answer:
-          "QC photos are quality-check references for CSSBuy products. They help you inspect shape, color, stitching, material, logos, tags, and sizing details before deciding whether a find is worth ordering.",
+          "Buyer QC photos can help compare shape, color, stitching, material, logos, tags, and measurements across orders. They do not authenticate an item or guarantee the batch or item that will be delivered.",
       },
       {
         question: "Does this CSSBuy spreadsheet include shoes, hoodies, T-shirts, bags, and pants?",
@@ -105,22 +105,9 @@ const faqCopy = {
 
 const currentCopy = faqCopy[lang];
 const faqs = currentCopy.items;
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
-    },
-  })),
-};
 ---
 
-<section class="shell mt-12" aria-labelledby="faq-heading" data-faq-section>
+<section id="frequently-asked-questions" class="shell mt-12 scroll-mt-24" aria-labelledby="faq-heading" data-faq-section>
   <div class="text-center">
     <p class="text-sm font-black uppercase text-clay">{currentCopy.eyebrow}</p>
     <h2 id="faq-heading" class="mt-2 text-3xl font-black tracking-normal text-ink md:text-4xl">{currentCopy.heading}</h2>
@@ -144,7 +131,6 @@ const faqSchema = {
         ))
       }
   </div>
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </section>
 
 <script>

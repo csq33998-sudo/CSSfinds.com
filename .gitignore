@@ -8,6 +8,7 @@ dist/
 
 *.log
 artifacts-*.png
+output/
 
 .env
 .env.*

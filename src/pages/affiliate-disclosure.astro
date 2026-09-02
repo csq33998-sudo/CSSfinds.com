@@ -1,0 +1,45 @@
+---
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "Affiliate Disclosure | CSSFinds";
+const description = "CSSFinds affiliate-link disclosure, editorial independence policy, and explanation of sponsored external product links.";
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: "https://cssfinds.com/affiliate-disclosure/",
+    dateModified: "2026-09-02",
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "Affiliate Disclosure", url: "https://cssfinds.com/affiliate-disclosure/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} canonical="https://cssfinds.com/affiliate-disclosure/" schema={schema} lang="en">
+  <section class="border-b border-line bg-white">
+    <div class="shell py-10 md:py-14">
+      <p class="text-sm font-black uppercase text-ocean">Transparency</p>
+      <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight text-ink md:text-5xl">Affiliate disclosure</h1>
+      <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/70">External product and shopping links may be affiliate or sponsored links. If a qualifying action produces compensation, it should not increase the price you see on the destination page.</p>
+    </div>
+  </section>
+  <section class="shell mt-8 grid gap-5 md:grid-cols-2">
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-black text-ink">How links are marked</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">Outbound commercial links are technically marked as sponsored. The destination site controls its prices, inventory, policies, tracking, checkout, and fulfillment.</p>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-black text-ink">Editorial independence</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">Compensation does not replace our source-page and QC-evidence checks. Inclusion is based on the published methodology, and no payment can turn an unverified claim into a verified one.</p>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm md:col-span-2">
+      <h2 class="text-2xl font-black text-ink">Before you act</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">Recheck the destination page, total cost, seller terms, shipping availability, import rules, and return policy. A CSSFinds listing is research assistance, not a warranty, authentication, or purchase recommendation.</p>
+    </article>
+  </section>
+</BaseLayout>

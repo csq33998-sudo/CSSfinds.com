@@ -1,6 +1,7 @@
 ---
 import ProductExplorer from "@/components/ProductExplorer.astro";
-import { categories, getBreadcrumbSchema, getItemListSchema, products } from "@/data/products";
+import { categoryGuides } from "@/data/category-guides";
+import { categories, getBreadcrumbSchema, products } from "@/data/products";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 export function getStaticPaths() {
@@ -12,33 +13,114 @@ export function getStaticPaths() {
 
 const { category } = Astro.props;
 const categoryProducts = products.filter((product) => product.category === category.slug);
-const title = `${category.title} 2026 - Prices, QC Photos and StreetStyle Links`;
-const description = `Browse ${category.label.toLowerCase()} in the CSSBuy spreadsheet with item photos, prices, QC status, update dates, and StreetStyle links.`;
+const guide = categoryGuides[category.slug];
+const prices = categoryProducts.map((product) => product.price).sort((a, b) => a - b);
+const minimumPrice = prices[0];
+const maximumPrice = prices.at(-1);
+const medianPrice = prices.length % 2 === 0
+  ? Math.round((prices[prices.length / 2 - 1] + prices[prices.length / 2]) / 2)
+  : prices[Math.floor(prices.length / 2)];
+const evidenceExamples = [...categoryProducts]
+  .sort((a, b) => b.qcPhotoSets - a.qcPhotoSets || a.price - b.price)
+  .slice(0, 2);
+const title = `${category.title}: Sizing, QC and Price Guide`;
+const description = `Research ${category.label.toLowerCase()} with category-specific sizing advice, QC checks, recorded CNY prices, common quality issues, filtering steps, and listing evidence.`;
 const canonicalPath = `/cssbuy-${category.slug}/`;
-const schema = [
-  getItemListSchema({
-    items: categoryProducts,
-    name: `${category.title} product finds`,
-    url: `https://cssfinds.com${canonicalPath}`,
-  }),
-  getBreadcrumbSchema([
-    { name: "CSSFinds", url: "https://cssfinds.com/" },
-    { name: "CSSBuy Spreadsheet", url: "https://cssfinds.com/cssbuy-spreadsheet/" },
-    { name: category.title, url: `https://cssfinds.com${canonicalPath}` },
-  ]),
-];
+const schema = getBreadcrumbSchema([
+  { name: "CSSFinds", url: "https://cssfinds.com/" },
+  { name: category.title, url: `https://cssfinds.com${canonicalPath}` },
+]);
 ---
 
 <BaseLayout title={title} description={description} schema={schema}>
-  <section class="shell py-10">
-    <p class="text-sm font-black uppercase text-clay">Category spreadsheet</p>
+  <section class="border-b border-line bg-white">
+    <div class="shell py-10 md:py-14">
+    <p class="text-sm font-black uppercase text-clay">{guide.eyebrow}</p>
     <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight tracking-normal md:text-5xl">
-      {category.title}
+      {category.label}: sizing, QC checks, prices, and evidence
     </h1>
     <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/75">
-      A focused CSSBuy spreadsheet page for {category.label.toLowerCase()} finds. Use it to compare prices, QC status, update dates, and item tags before continuing to StreetStyle.
+      {guide.intro}
     </p>
-    <a class="button mt-6 bg-ink text-white" href={category.destinationUrl} rel="sponsored noopener" target="_blank">Shop {category.label} on StreetStyle</a>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <button class="button bg-ink text-white" type="button" data-scroll-target="category-catalog">Review {category.label} evidence</button>
+      <a class="button border border-ink bg-white text-ink" href="/qc/">Use the full QC guide</a>
+    </div>
+    </div>
   </section>
-  <ProductExplorer products={categoryProducts} heading={category.title} />
+
+  <section class="shell mt-8 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]" aria-label={`${category.label} research summary`}>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <p class="text-sm font-black uppercase text-ocean">Recorded price snapshot</p>
+      <h2 class="mt-2 text-2xl font-black text-ink">CNY {minimumPrice}–{maximumPrice} across {categoryProducts.length} checked listings</h2>
+      <p class="mt-3 max-w-2xl text-sm font-bold leading-6 text-ink/65">
+        The median recorded item price is CNY {medianPrice}. These are source-page prices captured on September 2, 2026, before domestic freight, agent fees, international shipping, tax, or currency conversion. They are not live quotes.
+      </p>
+    </article>
+    <article class="rounded-lg border border-line bg-paper p-6">
+      <p class="text-sm font-black uppercase text-clay">How to use the range</p>
+      <h2 class="mt-2 text-2xl font-black text-ink">Compare like with like</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">
+        A low price is not a quality score. Compare items with similar materials, construction, dimensions, and available QC evidence, then recheck the destination page before acting.
+      </p>
+    </article>
+  </section>
+
+  <section class="shell mt-8 grid gap-5 md:grid-cols-2">
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-black text-ink">{guide.sizingTitle}</h2>
+      <ul class="mt-4 list-disc space-y-3 pl-5 text-base leading-7 text-ink/70">
+        {guide.sizingPoints.map((point) => <li>{point}</li>)}
+      </ul>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-black text-ink">Category-specific QC points</h2>
+      <ul class="mt-4 list-disc space-y-3 pl-5 text-base leading-7 text-ink/70">
+        {guide.qcPoints.map((point) => <li>{point}</li>)}
+      </ul>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-black text-ink">Common quality problems</h2>
+      <ul class="mt-4 list-disc space-y-3 pl-5 text-base leading-7 text-ink/70">
+        {guide.commonIssues.map((point) => <li>{point}</li>)}
+      </ul>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-black text-ink">A practical filtering method</h2>
+      <ol class="mt-4 list-decimal space-y-3 pl-5 text-base leading-7 text-ink/70">
+        {guide.filterSteps.map((point) => <li>{point}</li>)}
+      </ol>
+    </article>
+  </section>
+
+  <section class="shell mt-10" aria-labelledby="evidence-examples-heading">
+    <p class="text-sm font-black uppercase text-ocean">Real listing examples</p>
+    <h2 id="evidence-examples-heading" class="mt-2 text-3xl font-black text-ink">How the evidence changes the comparison</h2>
+    <p class="mt-3 max-w-3xl text-base leading-7 text-ink/70">
+      These are examples from the checked source-page set, not customer purchase outcomes. The QC count shows how many buyer photo sets were visible when reviewed; it does not guarantee the next item or prove authenticity.
+    </p>
+    <div class="mt-5 grid gap-5 md:grid-cols-2">
+      {evidenceExamples.map((product) => (
+        <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+          <div class="flex flex-wrap gap-2 text-xs font-black uppercase text-ink/60">
+            <span class="tag">CNY {product.price}</span>
+            <span class="tag">{product.qcPhotoSets} buyer QC {product.qcPhotoSets === 1 ? "set" : "sets"}</span>
+          </div>
+          <h3 class="mt-4 text-xl font-black text-ink">{product.name}</h3>
+          <p class="mt-3 text-sm font-bold leading-6 text-ink/65"><strong class="text-ink">Why retained:</strong> {product.selectionReason}</p>
+          <p class="mt-3 text-sm font-bold leading-6 text-ink/65"><strong class="text-ink">What still needs checking:</strong> {product.riskNote}</p>
+          <a class="mt-5 inline-flex min-h-11 items-center font-black text-ocean underline decoration-2 underline-offset-4 hover:text-ink" href={product.qcEvidenceUrl}>View this product’s QC evidence</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <div id="category-catalog">
+    <ProductExplorer
+      products={categoryProducts}
+      heading={`${category.label} evidence catalog`}
+      intro={`Filter ${categoryProducts.length} checked ${category.label.toLowerCase()} listings by brand and recorded CNY price. Each result exposes the source, QC-set count, source-check time, selection reason, and remaining risks.`}
+      showSearch={false}
+    />
+  </div>
 </BaseLayout>

@@ -14,63 +14,109 @@ const { products, lang = "en", showSearch = true } = Astro.props;
 const t = copy[lang].explorer;
 const heading = Astro.props.heading ?? t.heading;
 const intro = Astro.props.intro ?? t.intro;
-const latestProducts = [...products].sort((a, b) => b.updated.localeCompare(a.updated));
+const latestProducts = [...products].sort((a, b) => b.lastVerifiedAt.localeCompare(a.lastVerifiedAt));
 const explorerId = `product-explorer-${Math.random().toString(36).slice(2)}`;
-const streetStyleSearch = {
-  en: { placeholder: "Search CSSBuy finds...", button: "Search" },
-  de: { placeholder: "CSSBuy Finds suchen...", button: "Suchen" },
-  fr: { placeholder: "Rechercher des finds CSSBuy...", button: "Rechercher" },
-  es: { placeholder: "Buscar finds CSSBuy...", button: "Buscar" },
-  it: { placeholder: "Cerca finds CSSBuy...", button: "Cerca" },
-  nl: { placeholder: "CSSBuy finds zoeken...", button: "Zoeken" },
-  pt: { placeholder: "Buscar finds CSSBuy...", button: "Buscar" },
-}[lang];
-
-const getViews = (product: Product) => {
-  const seed = [...product.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  return 1200 + seed * 7;
-};
+const categoryOptions = [...new Set(products.map((product) => product.category))]
+  .map((category) => ({ value: category, label: getCategoryLabel(category, lang) }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+const brandOptions = [...new Set(products.map((product) => product.brand))].sort((a, b) => a.localeCompare(b));
+const priceOptions = [100, 150, 200, 300].filter(
+  (limit) => products.some((product) => product.price <= limit) && products.some((product) => product.price > limit),
+);
+const priceFormatter = new Intl.NumberFormat(lang, {
+  style: "currency",
+  currency: "CNY",
+  maximumFractionDigits: 0,
+});
+const formatPrice = (price: number) => priceFormatter.format(price);
+const formatVerificationTime = (value: string) =>
+  new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 ---
 
-<section id={explorerId} class="shell mt-4" aria-labelledby="latest-products-heading" data-product-explorer>
+<section id={explorerId} class="shell mt-8" aria-labelledby={`${explorerId}-heading`} data-product-explorer>
   {
     showSearch && (
-      <form
-        class="mb-8 flex w-full overflow-hidden rounded-lg border border-line bg-white shadow-sm"
-        action={streetStyleSearchUrl}
-        method="get"
-        target="_blank"
-        rel="noopener"
-        role="search"
-        aria-label="Search StreetStyle finds"
-        data-streetstyle-search
-      >
-        <label class="sr-only" for={`${explorerId}-search`}>{t.search}</label>
-        <input
-          id={`${explorerId}-search`}
-          class="min-h-14 min-w-0 flex-1 border-0 bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-0"
-          type="search"
-          name="q"
-          placeholder={streetStyleSearch.placeholder}
-          autocomplete="off"
-          data-streetstyle-search-input
-        />
-        <button class="min-h-14 shrink-0 bg-[#ff4b0b] px-6 text-base font-black text-white transition hover:bg-[#e83f00] md:px-8" type="submit">
-          {streetStyleSearch.button}
-        </button>
-      </form>
+      <div class="mb-8 rounded-lg border border-line bg-white p-4 shadow-sm">
+        <label class="block text-sm font-black text-ink" for={`${explorerId}-streetstyle-search`}>{t.searchOnStreetStyle}</label>
+        <form
+          class="mt-2 flex w-full overflow-hidden rounded-lg border border-line bg-white"
+          action={streetStyleSearchUrl}
+          method="get"
+          target="_blank"
+          rel="noopener"
+          role="search"
+          aria-label={t.searchOnStreetStyle}
+          data-streetstyle-search
+        >
+          <input
+            id={`${explorerId}-streetstyle-search`}
+            class="min-h-12 min-w-0 flex-1 border-0 bg-white px-4 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-2 focus:ring-inset focus:ring-ocean"
+            type="search"
+            name="q"
+            placeholder={t.externalSearchPlaceholder}
+            autocomplete="off"
+            data-streetstyle-search-input
+          />
+          <button class="min-h-12 shrink-0 bg-[#ff4b0b] px-4 text-sm font-black text-white transition hover:bg-[#e83f00] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-white sm:px-6 sm:text-base" type="submit">
+            {t.searchOnStreetStyle}
+          </button>
+        </form>
+      </div>
     )
   }
 
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
-      <h2 id="latest-products-heading" class="text-3xl font-black tracking-normal md:text-4xl">{heading}</h2>
-      <p class="mt-2 text-sm font-bold text-ink/55">{intro}</p>
+      <h2 id={`${explorerId}-heading`} class="text-3xl font-black tracking-normal md:text-4xl">{heading}</h2>
+      <p class="mt-2 max-w-3xl text-sm font-bold leading-6 text-ink/60">{intro}</p>
     </div>
-    <p class="text-sm font-black uppercase text-clay" data-product-count>{latestProducts.length} {t.items}</p>
+    <p class="text-sm font-black uppercase text-clay" aria-live="polite" data-product-count data-items-label={t.items}>
+      {latestProducts.length} {t.items}
+    </p>
   </div>
 
-  <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+  <form class="mt-6 rounded-lg border border-line bg-white p-4 shadow-sm" aria-label={t.filters} data-product-filters>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto] lg:items-end">
+      <div>
+        <label class="block text-sm font-black text-ink" for={`${explorerId}-filter-search`}>{t.search}</label>
+        <input
+          id={`${explorerId}-filter-search`}
+          class="mt-2 min-h-12 w-full rounded-md border border-line bg-white px-4 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:border-ocean focus:ring-2 focus:ring-ocean/20"
+          type="search"
+          placeholder={t.searchPlaceholder}
+          autocomplete="off"
+          data-filter-search
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-black text-ink" for={`${explorerId}-filter-category`}>{t.category}</label>
+        <select id={`${explorerId}-filter-category`} class="mt-2 min-h-12 w-full rounded-md border border-line bg-white px-3 text-base font-bold text-ink focus:border-ocean focus:ring-2 focus:ring-ocean/20" data-filter-category>
+          <option value="">{t.allCategories}</option>
+          {categoryOptions.map((category) => <option value={category.value}>{category.label}</option>)}
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-black text-ink" for={`${explorerId}-filter-brand`}>{t.brand}</label>
+        <select id={`${explorerId}-filter-brand`} class="mt-2 min-h-12 w-full rounded-md border border-line bg-white px-3 text-base font-bold text-ink focus:border-ocean focus:ring-2 focus:ring-ocean/20" data-filter-brand>
+          <option value="">{t.allBrands}</option>
+          {brandOptions.map((brand) => <option value={brand}>{brand}</option>)}
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-black text-ink" for={`${explorerId}-filter-price`}>{t.maxPrice}</label>
+        <select id={`${explorerId}-filter-price`} class="mt-2 min-h-12 w-full rounded-md border border-line bg-white px-3 text-base font-bold text-ink focus:border-ocean focus:ring-2 focus:ring-ocean/20" data-filter-price>
+          <option value="">{t.anyPrice}</option>
+          {priceOptions.map((price) => <option value={price}>{t.under.replace("${price}", formatPrice(price))}</option>)}
+        </select>
+      </div>
+      <button class="button min-h-12 border border-ink bg-white text-ink hover:bg-paper" type="reset">{t.reset}</button>
+    </div>
+    <p class="mt-4 border-t border-line pt-4 text-sm font-bold leading-6 text-ink/65">
+      <strong class="text-ink">QC evidence:</strong> Every item below opens a local evidence viewer containing the current StreetStyle buyer-photo thumbnails checked for that exact product. These photos help with visual comparison but do not authenticate an item or guarantee the delivered product.
+    </p>
+  </form>
+
+  <div class="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-product-grid>
     {
       latestProducts.map((product) => (
         <article
@@ -80,7 +126,6 @@ const getViews = (product: Product) => {
           data-category={product.category}
           data-brand={product.brand}
           data-price={product.price}
-          data-qc={product.qc ? "true" : "false"}
         >
           <a href={product.destinationUrl} rel="sponsored noopener" target="_blank" aria-label={`${t.view}: ${getProductName(product, lang)}`}>
             <img
@@ -93,32 +138,91 @@ const getViews = (product: Product) => {
             />
           </a>
           <div class="p-4">
-            <div class="flex items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
               <span class="tag">{getCategoryLabel(product.category, lang)}</span>
-              <span class={product.qc ? "tag border-moss text-moss" : "tag text-ink/55"}>{product.qc ? t.available : t.pending}</span>
+              <span class="tag text-ink/60" data-qc-evidence>{product.qcPhotoSets} QC photo {product.qcPhotoSets === 1 ? "set" : "sets"}</span>
             </div>
             <h3 class="mt-3 min-h-[48px] text-base font-black leading-6">
               <a class="hover:text-ocean" href={product.destinationUrl} rel="sponsored noopener" target="_blank">
                 {getProductName(product, lang)}
               </a>
             </h3>
-            <p class="mt-1 text-xs font-bold text-ink/50">{product.brand} / {t.updated} {product.updated}</p>
-            <div class="mt-4 flex items-center justify-between gap-3">
-              <p class="text-xl font-black text-ink">${product.price}</p>
-              <div class="flex items-center gap-1 text-sm font-bold text-ink/55" aria-label={`${getViews(product)} views`}>
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <span>{getViews(product).toLocaleString("en-US")}</span>
-              </div>
+            <p class="mt-1 text-xs font-bold text-ink/50">{product.brand}</p>
+            <p class="mt-4 text-xl font-black text-ink">{formatPrice(product.price)}</p>
+            <dl class="mt-3 space-y-2 text-xs font-bold leading-5 text-ink/65">
+              <div><dt class="inline text-ink">Data source:</dt> <dd class="inline">{product.dataSource}</dd></div>
+              <div><dt class="inline text-ink">Source last checked:</dt> <dd class="inline">{formatVerificationTime(product.lastVerifiedAt)}</dd></div>
+              <div><dt class="inline text-ink">QC last checked:</dt> <dd class="inline">{formatVerificationTime(product.qcVerifiedAt)}</dd></div>
+              <div><dt class="inline text-ink">Price source:</dt> <dd class="inline">{product.priceSource} ({product.priceCurrency})</dd></div>
+            </dl>
+            <div class="mt-4 rounded-md border border-line bg-paper p-3">
+              <p class="text-xs font-black uppercase tracking-wide text-clay">Why we selected it</p>
+              <p class="mt-2 text-sm font-bold leading-6 text-ink/70">{product.selectionReason}</p>
             </div>
-            <a class="button mt-4 w-full border border-ink bg-ink text-center text-white" href={product.destinationUrl} rel="sponsored noopener" target="_blank">
-              {t.view}
-            </a>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">
+              <a class="button w-full border border-ink bg-ink text-center text-white" href={product.sourceUrl} rel="sponsored noopener" target="_blank">
+                Open source
+              </a>
+              <a class="button w-full border border-ink bg-white text-center text-ink" href={product.qcEvidenceUrl} aria-label={`View QC evidence for ${getProductName(product, lang)}`}>
+                View QC evidence
+              </a>
+            </div>
+            <details class="mt-4 border-t border-line pt-3 text-sm text-ink/70">
+              <summary class="cursor-pointer font-black text-ink">Risk notes and evidence record</summary>
+              <p class="mt-3 font-bold leading-6"><strong class="text-ink">Risk:</strong> {product.riskNote}</p>
+              <p class="mt-3 font-bold leading-6"><strong class="text-ink">Editor:</strong> {product.editor}</p>
+              <p class="mt-3 font-bold leading-6"><strong class="text-ink">Method:</strong> {product.verificationMethod}</p>
+            </details>
           </div>
         </article>
       ))
     }
   </div>
+
+  <div class="mt-6 hidden rounded-lg border border-line bg-white p-6 text-center shadow-sm" data-product-empty role="status">
+    <p class="text-lg font-black text-ink">{t.empty}</p>
+    <p class="mt-2 text-sm font-bold text-ink/55">{t.emptyHint}</p>
+  </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-product-explorer]").forEach((explorer) => {
+    const form = explorer.querySelector<HTMLFormElement>("[data-product-filters]");
+    const search = explorer.querySelector<HTMLInputElement>("[data-filter-search]");
+    const category = explorer.querySelector<HTMLSelectElement>("[data-filter-category]");
+    const brand = explorer.querySelector<HTMLSelectElement>("[data-filter-brand]");
+    const price = explorer.querySelector<HTMLSelectElement>("[data-filter-price]");
+    const count = explorer.querySelector<HTMLElement>("[data-product-count]");
+    const empty = explorer.querySelector<HTMLElement>("[data-product-empty]");
+    const rows = Array.from(explorer.querySelectorAll<HTMLElement>("[data-product-row]"));
+
+    if (!form || !search || !category || !brand || !price || !count || !empty) return;
+
+    const updateResults = () => {
+      const query = search.value.trim().toLowerCase();
+      const categoryValue = category.value;
+      const brandValue = brand.value;
+      const maximumPrice = price.value ? Number(price.value) : Number.POSITIVE_INFINITY;
+      let visibleCount = 0;
+
+      rows.forEach((row) => {
+        const matches =
+          (!query || (row.dataset.search ?? "").includes(query)) &&
+          (!categoryValue || row.dataset.category === categoryValue) &&
+          (!brandValue || row.dataset.brand === brandValue) &&
+          Number(row.dataset.price ?? 0) <= maximumPrice;
+
+        row.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+
+      count.textContent = `${visibleCount} ${count.dataset.itemsLabel ?? "items"}`;
+      empty.classList.toggle("hidden", visibleCount !== 0);
+    };
+
+    form.addEventListener("submit", (event) => event.preventDefault());
+    form.addEventListener("input", updateResults);
+    form.addEventListener("change", updateResults);
+    form.addEventListener("reset", () => window.setTimeout(updateResults, 0));
+  });
+</script>

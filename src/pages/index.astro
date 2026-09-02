@@ -2,24 +2,19 @@
 import CssbuyInfoSection from "@/components/CssbuyInfoSection.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import ProductExplorer from "@/components/ProductExplorer.astro";
-import { categories, getBreadcrumbSchema, getItemListSchema, products, promotionUrl, streetStyleSearchUrl } from "@/data/products";
+import { categories, getBreadcrumbSchema, products, promotionUrl, streetStyleSearchUrl } from "@/data/products";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 const lang = "en";
-const popularQueries = [
+const suggestedQueries = [
   "CSSBuy shoes spreadsheet",
   "CSSBuy hoodie finds",
   "CSSBuy T-shirts spreadsheet",
   "CSSBuy bags spreadsheet",
 ];
-const title = "Curated CSSBuy Spreadsheet 2026 | Preview Finds & QC";
+const title = "Source-Checked CSSBuy Product Catalog 2026 | CSSFinds";
 const description =
-  "Browse a curated CSSBuy spreadsheet preview with QC-ready finds, sneakers, streetwear, prices, product photos, and direct shopping links.";
-const sheetEmbedUrl = import.meta.env.PUBLIC_GOOGLE_SHEET_EMBED_URL ?? "";
-const sheetViewUrl = import.meta.env.PUBLIC_GOOGLE_SHEET_VIEW_URL ?? "/cssbuy-spreadsheet/";
-const previewRows = [...products]
-  .sort((a, b) => b.updated.localeCompare(a.updated))
-  .slice(0, 8);
+  "Browse 42 source-checked CSSBuy listings with StreetStyle sources, recorded CNY prices, check times, direct buyer QC evidence, selection reasons, and risk notes.";
 const schema = [
   {
     "@context": "https://schema.org",
@@ -27,12 +22,6 @@ const schema = [
     name: "CSSFinds",
     url: "https://cssfinds.com/",
   },
-  getItemListSchema({
-    items: products,
-    name: "CSSBuy Spreadsheet 2026 finds on CSSFinds",
-    url: "https://cssfinds.com/",
-    lang,
-  }),
   getBreadcrumbSchema([{ name: "CSSFinds", url: "https://cssfinds.com/" }]),
 ];
 ---
@@ -44,22 +33,22 @@ const schema = [
   >
     <div class="shell py-12 md:py-16 lg:py-20">
       <div class="flex flex-wrap gap-2">
-        <span class="tag border-ink bg-ink text-white">Curated preview</span>
-        <span class="tag border-white/35 bg-white/92 text-ink">CSSBuy spreadsheet</span>
-        <span class="tag border-white/35 bg-white/92 text-ink">QC photo links</span>
+        <span class="tag border-ink bg-ink text-white">42 source-checked listings</span>
+        <span class="tag border-white/35 bg-white/92 text-ink">Recorded CNY prices</span>
+        <span class="tag border-white/35 bg-white/92 text-ink">Direct QC evidence</span>
       </div>
       <h1 class="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-normal drop-shadow-sm md:text-5xl">
-        Curated CSSBuy Spreadsheet 2026
+        42 Source-Checked Product Listings
       </h1>
       <p class="mt-5 max-w-3xl text-base leading-7 text-white/86 md:text-lg">
-        Browse a spreadsheet-first index of sneakers, hoodies, T-shirts, bags, accessories, and pants with prices, QC status, update dates, product photos, and direct shopping links.
+        We reduced the catalog to 42 product pages that were opened and checked on StreetStyle. Every listing records the displayed CNY price, source-check time, buyer QC-photo count, an editorial selection reason, and category-specific risks. This is listing research, not product authentication.
       </p>
-      <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-white/78" aria-label="Popular CSSBuy spreadsheet searches">
-        <span class="text-white">Popular searches:</span>
-        {popularQueries.map((query) => <span class="rounded-full border border-white bg-white px-3 py-1 text-ink shadow-sm">{query}</span>)}
+      <div class="mt-4 flex max-w-3xl flex-wrap items-center gap-2 text-sm font-bold text-white/78" aria-label="Suggested CSSBuy spreadsheet searches">
+        <span class="text-white">Suggested searches:</span>
+        {suggestedQueries.map((query) => <span class="rounded-full border border-white bg-white px-3 py-1 text-ink shadow-sm">{query}</span>)}
       </div>
       <div class="mt-6 flex flex-wrap gap-3">
-        <a class="button bg-white text-ink" href="/cssbuy-spreadsheet/">Open spreadsheet</a>
+        <button class="button bg-white text-ink" type="button" data-scroll-target="product-catalog">Browse product catalog</button>
         <a class="button border border-white/40 bg-white/12 text-white hover:border-white" href={promotionUrl} rel="sponsored noopener" target="_blank">Visit StreetStyle</a>
       </div>
       <form
@@ -72,112 +61,42 @@ const schema = [
         aria-label="Search StreetStyle finds"
         data-streetstyle-search
       >
-        <label class="sr-only" for="hero-streetstyle-search">Search CSSBuy finds</label>
+        <label class="sr-only" for="hero-streetstyle-search">Search products on StreetStyle</label>
         <input
           id="hero-streetstyle-search"
           class="min-h-14 min-w-0 flex-1 border-0 bg-white px-5 text-base font-bold text-ink outline-none placeholder:text-ink/45 focus:ring-0"
           type="search"
           name="q"
-          placeholder="Search CSSBuy finds..."
+          placeholder="Search products on StreetStyle..."
           autocomplete="off"
           data-streetstyle-search-input
         />
         <button class="min-h-14 shrink-0 bg-[#ff4b0b] px-6 text-base font-black text-white transition hover:bg-[#e83f00] md:px-8" type="submit">
-          Search
+          Search on StreetStyle
         </button>
       </form>
     </div>
   </section>
 
-  <section id="cssbuy-spreadsheet" class="shell mt-8" aria-labelledby="spreadsheet-heading">
-    <div class="grid gap-5 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
-      <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-        <p class="text-sm font-black uppercase text-clay">Live spreadsheet access</p>
-        <h2 id="spreadsheet-heading" class="mt-2 text-2xl font-black tracking-normal text-ink md:text-3xl">
-          CSSBuy Spreadsheet 2026 Preview
-        </h2>
-        <p class="mt-3 text-sm leading-6 text-ink/65">
-          Use this landing page as the public entry point for CSSBuy product research. The embedded sheet can be swapped with your Google Sheets publish URL through <code>PUBLIC_GOOGLE_SHEET_EMBED_URL</code>, while the preview links below stay pointed at StreetStyle.
-        </p>
-        <div class="mt-5 grid grid-cols-3 gap-2 text-center">
-          <div class="rounded-md border border-line bg-paper px-3 py-4">
-            <p class="text-2xl font-black text-ink">{products.length}</p>
-            <p class="mt-1 text-xs font-bold text-ink/55">Preview finds</p>
-          </div>
-          <div class="rounded-md border border-line bg-paper px-3 py-4">
-            <p class="text-2xl font-black text-ink">{products.filter((product) => product.qc).length}</p>
-            <p class="mt-1 text-xs font-bold text-ink/55">QC ready</p>
-          </div>
-          <div class="rounded-md border border-line bg-paper px-3 py-4">
-            <p class="text-2xl font-black text-ink">{categories.length}</p>
-            <p class="mt-1 text-xs font-bold text-ink/55">Categories</p>
-          </div>
-        </div>
-        <a class="button mt-5 w-full bg-[#ff4b0b] text-white hover:bg-[#e83f00]" href={sheetViewUrl} target={sheetViewUrl.startsWith("http") ? "_blank" : undefined} rel={sheetViewUrl.startsWith("http") ? "noopener" : undefined}>
-          View full spreadsheet
-        </a>
-      </div>
-
-      <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
-        {
-          sheetEmbedUrl ? (
-            <iframe
-              title="CSSBuy Spreadsheet 2026 embedded Google Sheet"
-              src={sheetEmbedUrl}
-              class="h-[720px] w-full"
-              loading="lazy"
-            />
-          ) : (
-            <div class="overflow-x-auto">
-              <table class="w-full table-fixed border-collapse text-left text-[11px] sm:text-xs">
-                <thead class="bg-ink text-white">
-                  <tr>
-                    <th class="w-[15%] px-2 py-3 font-black">Category</th>
-                    <th class="w-[29%] px-2 py-3 font-black">Item Name</th>
-                    <th class="w-[10%] px-2 py-3 font-black">Price</th>
-                    <th class="w-[16%] px-2 py-3 font-black">QC Photos</th>
-                    <th class="w-[14%] px-2 py-3 font-black">Cop Link</th>
-                    <th class="w-[16%] px-2 py-3 font-black">Rating</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    previewRows.map((product) => {
-                      const category = categories.find((item) => item.slug === product.category)?.label ?? product.category;
-                      return (
-                        <tr class="border-b border-line last:border-b-0">
-                          <td class="break-words px-2 py-3 font-bold text-ink/70">{category}</td>
-                          <td class="break-words px-2 py-3 font-black text-ink">{product.name}</td>
-                          <td class="px-2 py-3 font-bold text-ink">${product.price}</td>
-                          <td class="break-words px-2 py-3 font-bold">{product.qc ? "Available" : "Pending"}</td>
-                          <td class="px-2 py-3">
-                            <a class="font-black text-ocean hover:text-ink" href={product.destinationUrl} target="_blank" rel="sponsored noopener">Open</a>
-                          </td>
-                          <td class="px-2 py-3 font-bold text-ink">{product.rating.toFixed(1)}/5</td>
-                        </tr>
-                      );
-                    })
-                  }
-                </tbody>
-              </table>
-            </div>
-          )
-        }
-      </div>
-    </div>
-  </section>
-
-  <ProductExplorer products={products} lang={lang} showSearch={false} />
+  <div id="product-catalog">
+    <ProductExplorer
+      products={products}
+      lang={lang}
+      heading="42-listing evidence catalog"
+      intro="Filter the editorial selection by category, brand, and maximum CNY price. Each card links to the source and the buyer QC-photo evidence we checked on StreetStyle."
+      showSearch={false}
+    />
+  </div>
   <section class="shell mt-12">
     <div class="grid gap-4 rounded-lg border border-line bg-white p-5 md:grid-cols-[1.2fr_2fr] md:items-center">
       <div>
         <h2 class="text-xl font-black text-ink">CSSBuy spreadsheet categories</h2>
         <p class="mt-2 text-sm leading-6 text-ink/65">
-          Browse the full CSSBuy spreadsheet index or open focused category pages for shoes, hoodies, T-shirts, bags, accessories, pants, and QC-ready finds.
+          Filter the source-checked selection above, or open focused category pages for shoes, hoodies, T-shirts, bags, accessories, and pants.
         </p>
       </div>
       <div class="flex flex-wrap gap-2 text-sm font-bold">
-        <a class="rounded-md border border-ink bg-ink px-3 py-2 text-white" href="/cssbuy-spreadsheet/">Full CSSBuy spreadsheet</a>
+        <button class="rounded-md border border-ink bg-ink px-3 py-2 text-white" type="button" data-scroll-target="product-catalog">Browse all products</button>
         {categories.map((category) => (
           <a class="rounded-md border border-line px-3 py-2 text-ink/75 hover:border-ink hover:text-ink" href={`/cssbuy-${category.slug}/`}>
             {category.title}

@@ -1,0 +1,61 @@
+---
+import { getBreadcrumbSchema } from "@/data/products";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "About CSSFinds | Independent Product Research";
+const description = "Learn what CSSFinds publishes, where its product data comes from, and the limits of its independent editorial checks.";
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: title,
+    description,
+    url: "https://cssfinds.com/about/",
+  },
+  getBreadcrumbSchema([
+    { name: "CSSFinds", url: "https://cssfinds.com/" },
+    { name: "About", url: "https://cssfinds.com/about/" },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} canonical="https://cssfinds.com/about/" schema={schema} lang="en">
+  <section class="border-b border-line bg-white">
+    <div class="shell py-10 md:py-14">
+      <p class="text-sm font-black uppercase text-ocean">About CSSFinds</p>
+      <h1 class="mt-3 max-w-4xl text-4xl font-black leading-tight text-ink md:text-5xl">A smaller catalog with visible evidence</h1>
+      <p class="mt-4 max-w-3xl text-lg leading-8 text-ink/70">CSSFinds is an independent editorial catalog for comparing product listings. We favor a limited, reviewable selection over a large feed of unchecked links.</p>
+    </div>
+  </section>
+  <section class="shell mt-8 grid gap-5 md:grid-cols-3">
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-xl font-black text-ink">What we publish</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">The main catalog contains 42 product pages checked on StreetStyle. Each entry includes the visible CNY price, verification time, QC evidence count, an editorial reason, and risk notes.</p>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-xl font-black text-ink">What we do not claim</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">We do not verify inventory, shipping speed, free shipping, returns, seller identity, product authenticity, or the condition of the item ultimately delivered.</p>
+    </article>
+    <article class="rounded-lg border border-line bg-white p-6 shadow-sm">
+      <h2 class="text-xl font-black text-ink">Independence</h2>
+      <p class="mt-3 text-sm font-bold leading-6 text-ink/65">CSSFinds is not StreetStyle, CSSBuy, a brand owner, or an authentication service. External product pages remain the authoritative source for current listing details.</p>
+    </article>
+  </section>
+  <section class="shell mt-8">
+    <div class="rounded-lg border border-line bg-paper p-6 md:flex md:items-center md:justify-between md:gap-6">
+      <div>
+        <h2 class="text-2xl font-black text-ink">See how a listing is checked</h2>
+        <p class="mt-2 max-w-2xl text-sm font-bold leading-6 text-ink/65">Our methodology explains selection, price recording, QC evidence, exclusions, and update limits.</p>
+      </div>
+      <a class="button mt-5 border border-ink bg-ink text-white md:mt-0" href="/editorial-methodology/">Read the methodology</a>
+    </div>
+  </section>
+  <section id="corrections" class="shell mt-8 scroll-mt-24">
+    <div class="rounded-lg border border-line bg-white p-6 shadow-sm md:p-8">
+      <p class="text-sm font-black uppercase text-clay">Corrections</p>
+      <h2 class="mt-2 text-2xl font-black text-ink">Report a broken link or factual error</h2>
+      <p class="mt-3 max-w-3xl text-sm font-bold leading-6 text-ink/65">Open a public repository issue for a changed price, missing QC evidence, unsupported claim, disclosure concern, or accessibility problem. Include the page, product name, source URL, and dated public evidence when possible. Do not post order numbers, addresses, payment details, or identity documents.</p>
+      <a class="button mt-5 border border-ink bg-ink text-white" href="https://github.com/csq33998-sudo/CSSfinds.com/issues/new" rel="noopener" target="_blank">Open a correction request</a>
+    </div>
+  </section>
+</BaseLayout>

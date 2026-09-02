@@ -1,4 +1,28 @@
 {
+  "redirects": [
+    { "source": "/cssbuy-spreadsheet", "destination": "/", "permanent": true },
+    { "source": "/cssbuy-spreadsheet/", "destination": "/", "permanent": true },
+    { "source": "/cssbuy-qc-photos", "destination": "/qc/", "permanent": true },
+    { "source": "/cssbuy-qc-photos/", "destination": "/qc/", "permanent": true },
+    { "source": "/cssbuy-spreadsheet-guide", "destination": "/how-to-buy/", "permanent": true },
+    { "source": "/cssbuy-spreadsheet-guide/", "destination": "/how-to-buy/", "permanent": true },
+    { "source": "/faq", "destination": "/", "permanent": true },
+    { "source": "/faq/", "destination": "/", "permanent": true },
+    { "source": "/blog", "destination": "/editorial-methodology/", "permanent": true },
+    { "source": "/blog/", "destination": "/editorial-methodology/", "permanent": true },
+    { "source": "/contact", "destination": "/about/", "permanent": true },
+    { "source": "/contact/", "destination": "/about/", "permanent": true },
+    { "source": "/finds", "destination": "/", "permanent": true },
+    { "source": "/finds/", "destination": "/", "permanent": true },
+    { "source": "/new", "destination": "/", "permanent": true },
+    { "source": "/new/", "destination": "/", "permanent": true },
+    { "source": "/de/:path*", "destination": "/", "permanent": true },
+    { "source": "/fr/:path*", "destination": "/", "permanent": true },
+    { "source": "/es/:path*", "destination": "/", "permanent": true },
+    { "source": "/it/:path*", "destination": "/", "permanent": true },
+    { "source": "/nl/:path*", "destination": "/", "permanent": true },
+    { "source": "/pt/:path*", "destination": "/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",

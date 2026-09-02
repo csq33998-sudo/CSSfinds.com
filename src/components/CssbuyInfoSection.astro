@@ -42,7 +42,7 @@ const { lang = "en" } = Astro.props;
       <article class="rounded-lg border border-line bg-paper p-4">
         <h3 class="text-base font-black text-ink">Research first</h3>
         <p class="mt-2 text-sm leading-6 text-ink/65">
-          CSSFinds helps you compare product cards, prices, categories, and QC-ready finds before opening agent links.
+          CSSFinds helps you compare product cards, checked prices, categories, and QC verification status before opening external links.
         </p>
       </article>
     </div>
@@ -53,10 +53,10 @@ const { lang = "en" } = Astro.props;
         CSSFinds is an independent spreadsheet-style discovery site. It is not the official CSSBuy website, but it helps shoppers organize CSSBuy-related finds by category, product image, converted USD price, status, update date, and quick View links.
       </p>
       <div class="mt-4 flex flex-wrap gap-2 text-sm font-bold">
-        <a class="rounded-md border border-ink bg-ink px-3 py-2 text-white" href={localizePath("/cssbuy-spreadsheet/", lang)}>
+        <a class="rounded-md border border-ink bg-ink px-3 py-2 text-white" href={localizePath("/", lang)}>
           Open CSSBuy spreadsheet
         </a>
-        <a class="rounded-md border border-line px-3 py-2 text-ink/75 hover:border-ink hover:text-ink" href={localizePath("/cssbuy-qc-photos/", lang)}>
+        <a class="rounded-md border border-line px-3 py-2 text-ink/75 hover:border-ink hover:text-ink" href={localizePath("/qc/", lang)}>
           QC photo guide
         </a>
       </div>

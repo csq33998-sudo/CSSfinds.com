@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { copy, languageMenuOptions, languages, localizePath, type Lang } from "@/data/i18n";
+import { copy, languageMenuOptions, localizePath, type Lang } from "@/data/i18n";
 
 type Props = {
   title: string;
@@ -9,14 +9,14 @@ type Props = {
   schema?: Record<string, unknown> | Record<string, unknown>[];
   image?: string;
   lang?: Lang;
+  noindex?: boolean;
 };
 
 const siteUrl = Astro.site ?? new URL("https://cssfinds.com");
 const defaultCanonical = new URL(Astro.url.pathname, siteUrl).href;
-const { title, description, canonical = defaultCanonical, schema, image = "/images/og/cssfinds-og.svg", lang = "en" } = Astro.props;
+const { title, description, canonical = defaultCanonical, schema, image = "/images/og/cssfinds-og.svg", lang = "en", noindex = false } = Astro.props;
 const siteName = "CSSFinds";
 const t = copy[lang];
-const currentPath = Astro.url.pathname;
 const currentLanguage = languageMenuOptions.find((language) => language.code === lang) ?? languageMenuOptions[0];
 const absoluteUrl = (path: string) => new URL(path, siteUrl).href;
 const socialImage = absoluteUrl(image);
@@ -29,15 +29,10 @@ const socialImage = absoluteUrl(image);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" href="/cssbuy-spreadsheet-favicon.svg?v=16" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/cssbuy-spreadsheet-favicon-custom.png" />
     <link rel="canonical" href={canonical} />
-    {
-      languages.map((language) => (
-        <link rel="alternate" hreflang={language.code} href={absoluteUrl(localizePath(currentPath, language.code))} />
-      ))
-    }
-    <link rel="alternate" hreflang="x-default" href={absoluteUrl(localizePath(currentPath, "en"))} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -64,13 +59,11 @@ const socialImage = absoluteUrl(image);
         <div class="flex flex-wrap items-center justify-end gap-2 text-sm font-bold">
           <div class="hidden items-center gap-2 md:flex">
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/", lang)}>{t.nav.home}</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/finds/">Finds</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/", lang)}>Catalog</a>
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/how-to-buy/">How to Buy</a>
             <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/qc/">QC</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/new/">New</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/faq/", lang)}>{t.nav.faq}</a>
-            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href={localizePath("/blog/", lang)}>{t.nav.blog}</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/editorial-methodology/">Methodology</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 hover:bg-paper hover:text-ink" href="/about/">About</a>
           </div>
           <div class="relative" data-language-menu>
             <button
@@ -126,12 +119,12 @@ const socialImage = absoluteUrl(image);
           </p>
         </div>
         <div class="flex flex-wrap gap-2 text-sm font-bold text-ink/70">
-          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/cssbuy-spreadsheet/", lang)}>{t.nav.spreadsheet}</a>
-          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/finds/">Finds</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/", lang)}>Catalog</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/how-to-buy/">How to Buy</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/qc/">QC</a>
-          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/new/">New</a>
-          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href={localizePath("/blog/", lang)}>{t.nav.blog}</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/about/">About</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/editorial-methodology/">Methodology</a>
+          <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/affiliate-disclosure/">Affiliate Disclosure</a>
           <a class="rounded-md px-3 py-2 hover:bg-paper hover:text-ink" href="/robots.txt">{t.footerRobots}</a>
         </div>
       </div>
@@ -155,6 +148,43 @@ const socialImage = absoluteUrl(image);
 <script is:inline async defer src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
+  const translationStorageKey = "cssfinds-translation-language";
+
+  const applyTranslation = (language: string, attempt = 0) => {
+    const select = document.querySelector(".goog-te-combo");
+
+    if (select instanceof HTMLSelectElement) {
+      if (select.value !== language) {
+        select.value = language;
+        select.dispatchEvent(new Event("change"));
+      }
+      return;
+    }
+
+    if (attempt < 100) {
+      window.setTimeout(() => applyTranslation(language, attempt + 1), 200);
+    }
+  };
+
+  const rememberTranslation = (language: string) => {
+    try {
+      window.localStorage.setItem(translationStorageKey, language);
+    } catch {
+      // Translation still works for the current page when storage is unavailable.
+    }
+  };
+
+  const restoreTranslation = () => {
+    try {
+      const language = window.localStorage.getItem(translationStorageKey);
+      if (language) {
+        applyTranslation(language);
+      }
+    } catch {
+      // Ignore storage restrictions and leave the page in its source language.
+    }
+  };
+
   document.querySelectorAll("[data-scroll-target]").forEach((control) => {
     control.addEventListener("click", () => {
       const targetId = control.getAttribute("data-scroll-target");
@@ -206,25 +236,10 @@ const socialImage = absoluteUrl(image);
     options.querySelectorAll("[data-translate-language]").forEach((item) => {
       item.addEventListener("click", () => {
         const language = item.getAttribute("data-translate-language");
-        let attempts = 0;
-
-        const translatePage = () => {
-          const select = document.querySelector(".goog-te-combo");
-
-          if (language && select instanceof HTMLSelectElement) {
-            select.value = language;
-            select.dispatchEvent(new Event("change"));
-            return;
-          }
-
-          attempts += 1;
-          if (attempts < 20) {
-            window.setTimeout(translatePage, 150);
-          }
-        };
 
         if (language) {
-          translatePage();
+          rememberTranslation(language);
+          applyTranslation(language);
         }
 
         closeMenu();
@@ -244,4 +259,6 @@ const socialImage = absoluteUrl(image);
       }
     });
   });
+
+  restoreTranslation();
 </script>
